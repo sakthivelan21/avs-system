@@ -1,0 +1,22 @@
+*, *::before, *::after {
+  --primary-blue: #007bff;
+  --primary-background:#2b2a33;
+  --primary-white:#ffffff;
+  --primary-grey:#d7d5d5;
+  --primary-purple:#4B5C8C;
+}
+
+
+
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:var(--primary-background);
+}
+
+

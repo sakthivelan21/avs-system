@@ -1,0 +1,21 @@
+.button
+{
+	cursor: pointer;
+    border-radius: 25px;
+    background: var(--primary-purple);
+    color: var(--primary-white);
+    font-size: 1.05rem;
+    font-weight: bold;
+    letter-spacing: .1rem;
+    transition:transform 0.3s;
+    padding: 2%;
+    border: none;
+    display:block;
+    width:25%;
+    margin:10px auto;
+}
+
+.button:hover{
+    transform:scale(1.1);
+    
+  }
