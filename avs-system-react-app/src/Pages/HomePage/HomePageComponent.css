@@ -1,0 +1,28 @@
+#home-page
+{
+	display:flex;
+	flex-wrap:wrap;
+	flex-direction:row;
+	justify-content:space-evenly;
+	background:var(--primary-dark);
+	padding-top:50px;
+}
+
+@media screen and (max-width: 900px){
+	#home-page
+	{
+		flex-direction:column;
+		flex-wrap:nowrap;
+		height:auto;
+		
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#home-page
+	{
+		flex-direction:column;
+		height:auto;
+	}
+	
+}

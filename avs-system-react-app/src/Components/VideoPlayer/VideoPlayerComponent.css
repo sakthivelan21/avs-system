@@ -1,0 +1,58 @@
+
+.camera-container
+{
+	width:35%;
+	display:flex;
+	flex-direction:column;
+	border:1px solid black;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
+	margin-top:8px;
+	margin-bottom:8px;
+	margin:10px auto;
+	padding-top:5px;
+	height:min-content;
+	background:var(--primary-purple);
+	color:var(--primary-grey);
+	
+}
+
+.camera-video
+{
+	margin:0 auto;
+	width:100%;
+	object-fit:cover;
+}
+
+.camera-details
+{
+	display: flex;
+    width: 90%;
+    padding:0px;
+    margin: 0 auto;
+	margin-bottom:5px;
+}
+
+.camera-name, .camera-timer
+{
+	margin:0px;
+}
+
+@media screen and (max-width: 900px){
+	
+	.camera-container
+	{
+		width:70%;
+		margin:10px auto;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	
+	.camera-container
+	{
+		width:80%;
+		margin:10px auto;
+	}
+}
+

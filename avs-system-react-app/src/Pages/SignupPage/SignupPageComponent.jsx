@@ -2,8 +2,8 @@ import React,{useCallback,useEffect,useRef,useReducer} from 'react';
 import { Link} from 'react-router-dom';
 
 import './SignupPageComponent.css';
-import InputComponent from '../../Components/InputComponent/InputComponent';
-import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
+import InputComponent from '../../Components/Input/InputComponent';
+import ButtonComponent from '../../Components/Button/ButtonComponent';
 
 
 const initialValue={
@@ -82,8 +82,8 @@ export default function SignupPageComponent()
 							placeholder="Password"
 							value={password}/>
 						
-						<ButtonComponent type="submit">
-							Signup
+						<ButtonComponent type="submit" classProp="button">
+							Signup <i className="fas fa-sign-in-alt"></i>
 						</ButtonComponent>
 					</form>
 					

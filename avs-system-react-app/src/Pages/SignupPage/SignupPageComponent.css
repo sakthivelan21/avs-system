@@ -5,7 +5,7 @@
 	display:flex;
 	height:85vh;
 	border-radius:10px;
-	box-shadow:1px 1px 10px 1px var(--primary-grey);
+	box-shadow:1px 1px 10px 1px var(--secondary-purple);
 }
 
 #signup-page-image

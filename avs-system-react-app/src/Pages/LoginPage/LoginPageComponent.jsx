@@ -2,8 +2,8 @@ import React,{useState,useCallback,useEffect,useRef} from 'react';
 import { Link} from 'react-router-dom';
 
 import './LoginPageComponent.css';
-import InputComponent from '../../Components/InputComponent/InputComponent';
-import ButtonComponent from '../../Components/ButtonComponent/ButtonComponent';
+import InputComponent from '../../Components/Input/InputComponent';
+import ButtonComponent from '../../Components/Button/ButtonComponent';
 
 
 
@@ -55,8 +55,8 @@ export default function LoginPageComponent()
 							inputRef={null}
 							placeholder="Password"
 							value={password}/>
-						<ButtonComponent type="submit">
-							Login
+						<ButtonComponent type="submit" classProp="button">
+							Login <i className="fas fa-sign-in-alt"></i>
 						</ButtonComponent>
 					</form>
 					

@@ -1,0 +1,93 @@
+#add-user-page
+{
+	margin:25px auto;
+	width:45%;
+	border-radius:10px;
+	background:var(--primary-white);
+	
+}
+
+#add-user-form
+{
+	padding:20px 0px;
+}
+
+#add-user-image
+{
+	margin:10px auto;
+	width:80px;
+	height:80px;
+	display:block;
+}
+
+.form-label
+{
+	margin: 10px auto;
+	display:block;
+	width:75%;
+	color:var(--primary-purple);
+	font-weight:500;
+}
+
+.input-file-holder
+{
+	margin:10px auto;
+	width:65%;
+	border: 2px solid var(--primary-grey);
+	border-radius: 30px;
+	padding: 3px;
+	display:flex;
+	justify-content:flex-start;
+}
+
+
+input[type=file]
+{
+	direction:rtl;
+	outline: none;
+	padding:5px;
+	background: transparent;
+	display:flex;
+	justify-content:center;
+}
+
+input[type=file]::file-selector-button {
+	cursor: pointer;
+    border-radius: 15px;
+    background: var(--primary-purple);
+    color: var(--primary-white);
+    font-size: 1.05rem;
+    font-weight: bold;
+    letter-spacing: .1rem;
+    transition:0.1s;
+    padding: 1.5%;
+    border: none;
+    display:inline-block;
+    margin:0px 5px;
+}
+
+input[type=file]::file-selector-button:hover {
+    transform:scale(1.1);
+}
+
+
+@media screen and (max-width: 950px) {
+	#add-user-page
+	{
+		width:65%;
+	}
+}
+
+@media screen and (max-width: 540px) {
+	#add-user-page
+	{
+		width:95%;
+	}
+}
+
+
+
+
+
+
+

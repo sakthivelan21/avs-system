@@ -1,0 +1,13 @@
+.select-container
+{
+	width:70%;
+	margin:0px auto;
+}
+
+.select-tag
+{
+	background: white;
+	border: 2px solid var(--primary-grey);
+	border-radius: 25px;
+	padding: 12px;
+}
