@@ -9,6 +9,8 @@ import SignupPageComponent from './Pages/SignupPage/SignupPageComponent';
 import AddUserPageComponent from './Pages/AddUserPage/AddUserPageComponent';
 import SettingsPageComponent from './Pages/SettingsPage/SettingsPageComponent';
 import HomePageComponent from './Pages/HomePage/HomePageComponent';
+import AccountDetailsComponent from './Components/AccountDetails/AccountDetailsComponent';
+import EditProfileComponent from './Components/EditProfile/EditProfileComponent';
 
 function App() {
   return (
@@ -18,7 +20,10 @@ function App() {
 				<Route path="/home" element={<HomePageComponent/>}/>
 				<Route path="/signup" element={<SignupPageComponent/>}/>
     			<Route path="/add-user" element={<AddUserPageComponent/>} />
-    			<Route path="/settings" element={<SettingsPageComponent/>} />
+    			<Route path="/settings" element={<SettingsPageComponent/>}>
+    				<Route path='' element={<AccountDetailsComponent/>}/>
+    				<Route path='edit-profile' element={<EditProfileComponent/>}/>
+    			</Route>
     			<Route path="*" element={<LoginPageComponent/>}/>
 			</Routes>
     	</>

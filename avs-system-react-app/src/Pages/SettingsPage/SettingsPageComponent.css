@@ -1,0 +1,32 @@
+#settings-page-container
+{
+	margin:25px auto;
+	display:flex;
+}
+
+#settings-nav-bar
+{
+	width:20%;
+	background:#3e3d49;
+	color:var(--primary-grey);
+}
+
+#settings-inner-components
+{
+	width:80%;
+}
+
+@media screen and (max-width: 900px) {
+	
+}
+
+@media screen and (max-width: 520px) {
+	#settings-page-container
+	{
+		flex-direction:column;
+	}
+	#settings-inner-components
+	{
+		width:100%;
+	}
+}
