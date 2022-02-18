@@ -11,6 +11,7 @@ import SettingsPageComponent from './Pages/SettingsPage/SettingsPageComponent';
 import HomePageComponent from './Pages/HomePage/HomePageComponent';
 import AccountDetailsComponent from './Components/AccountDetails/AccountDetailsComponent';
 import EditProfileComponent from './Components/EditProfile/EditProfileComponent';
+import ExistingUsersComponent from './Components/ExistingUsers/ExistingUsersComponent';
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
     			<Route path="/settings" element={<SettingsPageComponent/>}>
     				<Route path='' element={<AccountDetailsComponent/>}/>
     				<Route path='edit-profile' element={<EditProfileComponent/>}/>
+    				<Route path='existing-users' element={<ExistingUsersComponent/>}/>
+    					<Route path="edit-existing-user" element={<EditProfileComponent/>}/>
     			</Route>
     			<Route path="*" element={<LoginPageComponent/>}/>
 			</Routes>

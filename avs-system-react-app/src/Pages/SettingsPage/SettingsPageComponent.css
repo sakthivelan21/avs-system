@@ -8,14 +8,34 @@
 {
 	width:20%;
 	background:#3e3d49;
-	color:var(--primary-grey);
+	color:white;
 }
 
 #settings-inner-components
 {
 	width:80%;
 }
+.setting-nav-link
+{
+	color:var(--primary-grey);
+	text-decoration:none;
+	padding:10px 20px;
+	display:block;
+	transition:0.2s;
+}
 
+.setting-nav-heading
+{
+	font-size:1.35rem;
+	font-weight:450;
+	margin:20px; 
+}
+.setting-nav-link:hover
+{
+	background:hsla(0,0%,100%,.1);
+	text-shadow: 0 0 5px #000;
+	color:var(--primary-white);
+}
 @media screen and (max-width: 900px) {
 	
 }

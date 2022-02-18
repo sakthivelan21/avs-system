@@ -1,14 +1,14 @@
 .button
 {
 	cursor: pointer;
-    border-radius: 25px;
+    border-radius: 20px;
     background: var(--primary-purple);
     color: var(--primary-white);
     font-size: 1.05rem;
     font-weight: bold;
     letter-spacing: .1rem;
-    transition:transform 0.3s;
-    padding: 2%;
+    transition:transform ease-in 0.2s;
+    padding: 10px;
     border: none;
     display:block;
     margin:10px auto;
@@ -40,6 +40,32 @@
 }
 
 .nav-button:hover i
+{
+	transform:scale(1.05);
+	color:var(--primary-white);
+}
+
+.table-button
+{	
+	display:block;
+	margin:10px auto;
+	padding:7px 10px;
+	background:var(--primary-purple);
+	color:white;
+	font-weight: bold;
+    letter-spacing: .1rem;
+    transition:transform ease-in 0.1s;
+    border: none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.table-button:hover
+{
+	transform:scale(1.1);
+}
+
+.table-button:hover i
 {
 	transform:scale(1.05);
 	color:var(--primary-white);
