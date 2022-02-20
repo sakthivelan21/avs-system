@@ -1,10 +1,16 @@
 import React from 'react';
 import './TableComponent.css';
 import ButtonComponent from '../Button/ButtonComponent';
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 function TableComponent(props)
 {
 	const {tableDetails,tableRowDetails}=props;
+	const navigate=useNavigate();
+	// passing data to another route through react router
+	const editHandler=(userDetail,path)=>
+	{
+		navigate(path,{state:userDetail});
+	}
 	return(
 		<div className="info-table-container">
 				<table className="info-table">
@@ -12,13 +18,14 @@ function TableComponent(props)
 						<tr>
 							{
 								tableDetails.tableHeadings.map((tableName,index)=>(
-									<th key={index}>tableName</th>
+									<th key={index}>{tableName}</th>
 								))
 							}
 						</tr>
 					</thead>
 					<tbody>
 						{
+						(tableDetails.tableType==="userDetails")?
 						tableRowDetails.map((userDetail)=>{
 							return(
 							<tr key={userDetail.id}>
@@ -30,17 +37,35 @@ function TableComponent(props)
 								<td>{userDetail.mailId}</td>
 								<td>
 									
-										<Link to={tableDetails.actionEditLink} className="table-link-button">
-										<ButtonComponent type="table-button" classProp="table-button">
+										<ButtonComponent type="table-button" classProp="table-button" clickHandler={()=>editHandler(userDetail,tableDetails.actionEditLink)}>
 											Edit <i className="fas fa-edit"></i>
 										</ButtonComponent>
-										</Link>
 										<ButtonComponent type="table-button" classProp="table-button">
 											Delete <i className="fas fa-solid fa-trash"></i>
 										</ButtonComponent>
 									
 								</td>
 							</tr>
+							)
+						})
+						:
+						tableRowDetails.map((cameraDetails)=>{
+							return(
+								<tr key={cameraDetails.id}>
+									<td>{cameraDetails.id}</td>
+									<td>{cameraDetails.name}</td>
+									<td>{cameraDetails.location}</td>
+									<td>
+									
+										<ButtonComponent type="table-button" classProp="table-button" clickHandler={()=>editHandler(cameraDetails,tableDetails.actionEditLink)}>
+											Edit <i className="fas fa-edit"></i>
+										</ButtonComponent>
+										<ButtonComponent type="table-button" classProp="table-button">
+											Remove <i className="fas fa-solid fa-trash"></i>
+										</ButtonComponent>
+									
+								</td>
+								</tr>
 							)
 						})
 						}

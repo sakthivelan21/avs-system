@@ -1,4 +1,4 @@
-#edit-profile-component
+#add-new-camera-component
 {
 	background:var(--primary-white);
 	width:55%;
@@ -30,15 +30,14 @@
     animation: animate-border 0.3s ease-in;
 } 
 
-.edit-user-image
+.add-new-camera-image
 {
-	margin:10px auto;
-	width:80px;
-	height:80px;
+	width:130px;
+	height:130px;
 	display:block;
 }
 
-.edit-form-label
+.add-new-camera-form-label
 {
 	color:var(--primary-purple);
 	font-weight:500;
@@ -47,26 +46,6 @@
 	display:block;
 }
 
-.back-button button
-{
-	cursor: pointer;
-    border-radius: 25px;
-    background: var(--primary-purple);
-    color: var(--primary-white);
-    font-size: 1.05rem;
-    font-weight: bold;
-    letter-spacing: .1rem;
-    transition:transform 0.3s;
-    padding: 10px 20px;
-    border: none;
-    margin:10px 20px;
-}
-
-.back-button  button:hover{
-    transform:scale(1.1);
-    
-  }
-
 .form-holder
 {
 	display:flex;
@@ -74,20 +53,13 @@
 }
 
 @media screen and (max-width: 900px) {
-	
-	.edit-user-image
-	{
-		width:20%;
-		height:25%;
-	}
-	
 
-	#edit-profile-component
+	#add-new-camera-component
 	{
 		width:75%;
 	}
 	
-	.edit-form-label
+	.add-new-camera-label
 	{
 		width:70%;
 	}
@@ -95,18 +67,12 @@
 
 @media screen and (max-width: 480px) {
 	
-	.edit-user-image
-	{
-		width:30%;
-		height:30%;
-	}
-	
-	#edit-profile-component
+	#add-new-camera-component
 	{
 		width:90%;
 	}
 	
-	.edit-form-label
+	.add-new-camera-form-label
 	{
 		width:80%;
 	}

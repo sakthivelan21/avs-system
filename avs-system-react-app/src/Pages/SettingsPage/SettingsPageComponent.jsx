@@ -14,6 +14,7 @@ export default function SettingsPageComponent()
 					<Link to="/settings" className="setting-nav-link">Account Profile</Link>
 					<Link to="existing-users" className="setting-nav-link">Existing Users</Link>
 					<Link to="existing-cameras" className="setting-nav-link">Existing Camera Details</Link>
+					<Link to="add-new-camera" className="setting-nav-link">Add a New Camera</Link>
 				</div>
 				<div id="settings-inner-components">
 					<Outlet/>

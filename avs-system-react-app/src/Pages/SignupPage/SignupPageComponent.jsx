@@ -54,6 +54,7 @@ export default function SignupPageComponent()
 							name="name" 
 							onChange={updateUserDetails} 
 							type="text"
+							extraConditions={{}}
 							inputRef={inputRef}
 							placeholder="Enter your Name"
 							value={name}/>
@@ -62,6 +63,7 @@ export default function SignupPageComponent()
 							name="organisationName" 
 							onChange={updateUserDetails} 
 							type="text"
+							extraConditions={{}}
 							inputRef={null}
 							placeholder="Enter your Organisation Name"
 							value={organisationName}/>
@@ -70,6 +72,7 @@ export default function SignupPageComponent()
 							name="username" 
 							onChange={updateUserDetails} 
 							type="text"
+							extraConditions={{}}
 							inputRef={null}
 							placeholder="Username"
 							value={username}/>
@@ -78,6 +81,7 @@ export default function SignupPageComponent()
 							name="password" 
 							onChange={updateUserDetails} 
 							type="password"
+							extraConditions={{}}
 							inputRef={null}
 							placeholder="Password"
 							value={password}/>

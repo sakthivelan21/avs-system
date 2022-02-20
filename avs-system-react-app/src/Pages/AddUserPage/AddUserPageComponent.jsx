@@ -53,6 +53,7 @@ export default function AddUserPageComponent()
 							name="name" 
 							onChange={updateUserDetails} 
 							type="text"
+							extraConditions={{}}
 							inputRef={inputRef}
 							placeholder="Enter User Name"
 							value={name}/>
@@ -63,6 +64,7 @@ export default function AddUserPageComponent()
 							onChange={updateUserDetails} 
 							type="text"
 							inputRef={null}
+							extraConditions={{}}
 							placeholder="Enter User Designation"
 							value={designation}/>
 						<label htmlFor="workerType" className="form-label">Enter Type of the worker</label>

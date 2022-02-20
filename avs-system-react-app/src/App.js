@@ -12,6 +12,11 @@ import HomePageComponent from './Pages/HomePage/HomePageComponent';
 import AccountDetailsComponent from './Components/AccountDetails/AccountDetailsComponent';
 import EditProfileComponent from './Components/EditProfile/EditProfileComponent';
 import ExistingUsersComponent from './Components/ExistingUsers/ExistingUsersComponent';
+import EditExistingUserComponent from './Components/EditExistingUser/EditExistingUserComponent';
+import ExistingUserComponent from './Components/ExistingCameras/ExistingCamerasComponent';
+import EditExistingCameraComponent from './Components/EditExistingCamera/EditExistingCameraComponent';
+import ExistingCamerasComponent from './Components/ExistingCameras/ExistingCamerasComponent';
+import AddNewCameraComponent from './Components/AddNewCamera/AddNewCameraComponent';
 
 function App() {
   return (
@@ -25,7 +30,10 @@ function App() {
     				<Route path='' element={<AccountDetailsComponent/>}/>
     				<Route path='edit-profile' element={<EditProfileComponent/>}/>
     				<Route path='existing-users' element={<ExistingUsersComponent/>}/>
-    					<Route path="edit-existing-user" element={<EditProfileComponent/>}/>
+    				<Route path="edit-existing-user" element={<EditExistingUserComponent/>}/>
+    				<Route path='existing-cameras' element={<ExistingCamerasComponent/>}/>
+    				<Route path="edit-existing-camera" element={<EditExistingCameraComponent/>}/>
+    				<Route path="add-new-camera" element={<AddNewCameraComponent/>}/>
     			</Route>
     			<Route path="*" element={<LoginPageComponent/>}/>
 			</Routes>

@@ -44,6 +44,7 @@ export default function LoginPageComponent()
 							name="username" 
 							onChange={updateUsername} 
 							type="text"
+							extraConditions={{}}
 							inputRef={inputRef}
 							placeholder="Username"
 							value={username}/>
@@ -53,6 +54,7 @@ export default function LoginPageComponent()
 							onChange={updatePassword} 
 							type="password"
 							inputRef={null}
+							extraConditions={{}}
 							placeholder="Password"
 							value={password}/>
 						<ButtonComponent type="submit" classProp="button">

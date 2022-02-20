@@ -9,12 +9,13 @@ function ExistingUsersComponent()
 		"tableHeadings":[
 		"Id",
 		"Name",
-		"User Type",
+		"Worker Type",
 		"Designation",
 		"Phone No",
 		"Mail Id",
 		"Actions"],
-		"actionEditLink":"/settings/edit-existing-user"
+		"actionEditLink":"/settings/edit-existing-user",
+		"tableType":"userDetails"
 	};
 	const tableRowDetails=[
 		{

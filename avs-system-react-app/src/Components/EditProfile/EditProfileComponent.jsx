@@ -49,14 +49,15 @@ function EditProfileComponent()
 				</div>
 				<img src="../login-user.png" className="edit-user-image" alt="user-img"/>				
 				
-				<div id="signup-form-holder">
-					<form id="signup-form" onSubmit={submitHandler}>
+				<div className="form-holder">
+					<form  onSubmit={submitHandler}>
 						<label htmlFor="name" className="edit-form-label">Enter your Name</label>
 						<InputComponent 
 							iconClass="fa fa-user"
 							name="name" 
 							onChange={updateUserDetails} 
 							type="text"
+							extraConditions={{}}
 							inputRef={inputRef}
 							placeholder="Enter your Name"
 							value={name}/>
@@ -67,6 +68,7 @@ function EditProfileComponent()
 							onChange={updateUserDetails} 
 							type="text"
 							inputRef={null}
+							extraConditions={{}}
 							placeholder="Enter your Organisation Name"
 							value={organisationName}/>
 						<label htmlFor="username" className="edit-form-label">Enter your User Name</label>
@@ -76,6 +78,7 @@ function EditProfileComponent()
 							onChange={updateUserDetails} 
 							type="text"
 							inputRef={null}
+							extraConditions={{}}
 							placeholder="Username"
 							value={username}/>
 						<label htmlFor="password" className="edit-form-label">Enter your Password</label>
@@ -84,6 +87,7 @@ function EditProfileComponent()
 							name="password" 
 							onChange={updateUserDetails} 
 							type="password"
+							extraConditions={{}}
 							inputRef={null}
 							placeholder="Password"
 							value={password}/>
