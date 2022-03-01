@@ -1,11 +1,56 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import './TableComponent.css';
 import ButtonComponent from '../Button/ButtonComponent';
 import {useNavigate} from 'react-router-dom';
+import {AlertBoxContext} from '../../App';
 function TableComponent(props)
 {
 	const {tableDetails,tableRowDetails}=props;
 	const navigate=useNavigate();
+	
+	const alertBox = useContext(AlertBoxContext);
+	
+	const deleteUser = ()=> {
+	 	
+	 	let alertDetailsObject={
+			'alertBoxDetails':{
+				'alertTitle':'Do you want to remove the User ?',
+				'alertText':'user will be removed from the database...',
+				'alertBox':{
+						'type':'choice',
+						'cancelButtonText':'Cancel',
+						'confirmButtonText':'Remove',
+						'buttonState':false
+					}
+			},
+			'alertBoxDisplayState':true
+		};
+	 		
+	 	alertBox.alertBoxDetailsFunction(alertDetailsObject);
+	 
+	 };
+	
+	const deleteCamera = () => { 
+		
+		let alertDetailsObject={
+			'alertBoxDetails':{
+				'alertTitle':'Do you want to remove the Camera ?',
+				'alertText':'user will be removed from the database...',
+				'alertBox':{
+						'type':'choice',
+						'cancelButtonText':'Cancel',
+						'confirmButtonText':'Remove',
+						'buttonState':false
+					}
+			},
+			'alertBoxDisplayState':true
+		};
+		
+		alertBox.alertBoxDetailsFunction(alertDetailsObject);
+	
+	};
+	
+	
 	// passing data to another route through react router
 	const editHandler=(userDetail,path)=>
 	{
@@ -37,10 +82,17 @@ function TableComponent(props)
 								<td>{userDetail.mailId}</td>
 								<td>
 									
-										<ButtonComponent type="table-button" classProp="table-button" clickHandler={()=>editHandler(userDetail,tableDetails.actionEditLink)}>
+										<ButtonComponent 
+										type="table-button" 
+										classProp="table-button"
+										clickHandler={()=>
+										editHandler(userDetail,tableDetails.actionEditLink)}>
 											Edit <i className="fas fa-edit"></i>
 										</ButtonComponent>
-										<ButtonComponent type="table-button" classProp="table-button">
+										<ButtonComponent 
+										type="table-button" 
+										classProp="table-button"
+										clickHandler={deleteUser}>
 											Delete <i className="fas fa-solid fa-trash"></i>
 										</ButtonComponent>
 									
@@ -57,10 +109,17 @@ function TableComponent(props)
 									<td>{cameraDetails.location}</td>
 									<td>
 									
-										<ButtonComponent type="table-button" classProp="table-button" clickHandler={()=>editHandler(cameraDetails,tableDetails.actionEditLink)}>
+										<ButtonComponent 
+											type="table-button" 
+											classProp="table-button" 	
+											clickHandler={()=>
+											editHandler(cameraDetails,tableDetails.actionEditLink)}>
 											Edit <i className="fas fa-edit"></i>
 										</ButtonComponent>
-										<ButtonComponent type="table-button" classProp="table-button">
+										<ButtonComponent 
+											type="table-button" 
+											classProp="table-button"
+											clickHandler={deleteCamera}>
 											Remove <i className="fas fa-solid fa-trash"></i>
 										</ButtonComponent>
 									

@@ -2,7 +2,8 @@ import React from 'react';
 import './HomePageComponent.css';
 import NavBarComponent from '../../Components/NavBar/NavBarComponent';
 import VideoPlayerComponent from '../../Components/VideoPlayer/VideoPlayerComponent';
-export default function HomePageComponent()
+import FloatingVideoPlayerComponent from '../../Components/FloatingVideoPlayer/FloatingVideoPlayerComponent';
+function HomePageComponent()
 {
 	const cameraDetails=[
 		{
@@ -23,7 +24,9 @@ export default function HomePageComponent()
 		}
 		
 	];
-	return(<>
+	return(
+		<>
+			<FloatingVideoPlayerComponent/>
 			<NavBarComponent/>
 			<div id="home-page">
 				{
@@ -40,3 +43,4 @@ export default function HomePageComponent()
 			</div>
 		</>)
 }
+export default React.memo(HomePageComponent);

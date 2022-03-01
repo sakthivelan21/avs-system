@@ -45,6 +45,24 @@
 	color:var(--primary-white);
 }
 
+.alert-button
+{
+	color: var(--primary-white);
+	background: var(--primary-purple);
+	border:none;	
+	padding:6px 12px;
+	transition:transform ease-in 0.2s;
+	font-size: 1.05rem;
+	margin:5px;
+	border-radius:4px;
+	cursor:pointer;
+}
+
+.alert-button:hover
+{
+	transform:scale(1.08);
+}
+
 .table-button
 {	
 	display:block;
@@ -71,3 +89,30 @@
 	color:var(--primary-white);
 }
 
+.close-video-button
+{
+	border:none;
+	color:var(--primary-grey);
+	background:inherit;
+	padding:0;
+	margin:0;
+	width:fit-content;
+	height:fit-content;
+	cursor:pointer;
+	transition:transform ease-in 0.1s;
+}
+
+.close-video-button i
+{
+	font-size:1.85rem;
+}
+
+.close-video-button:hover
+{
+	transform:scale(1.2);
+}
+
+.close-video-button:hover i
+{
+	color:#e36565;
+}
