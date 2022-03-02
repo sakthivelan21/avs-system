@@ -102,12 +102,30 @@
 	transition:transform ease-in 0.1s;
 }
 
+.expand-video-button
+{
+	border:none;
+	color:var(--primary-white);
+	background:inherit;
+	padding:0;
+	margin:0;
+	width:fit-content;
+	height:fit-content;
+	cursor:pointer;
+	transition:transform ease-in 0.1s;
+}
+
+.expand-video-button i
+{
+	font-size:1.35rem;
+}
+
 .close-video-button i
 {
 	font-size:1.85rem;
 }
 
-.close-video-button:hover
+.close-video-button:hover,.expand-video-button:hover
 {
 	transform:scale(1.2);
 }

@@ -8,6 +8,15 @@
 	
 }
 
+.show-floating-video-holder
+{
+	display:block;
+}
+
+.hide-floating-video-holder
+{
+	display:none;
+}
 
 .floating-video-holder
 {
