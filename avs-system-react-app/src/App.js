@@ -1,4 +1,4 @@
-import React,{useReducer} from 'react';
+import React,{useReducer,useRef} from 'react';
 import {
   Routes,
   Route
@@ -13,19 +13,33 @@ import AccountDetailsComponent from './Components/AccountDetails/AccountDetailsC
 import EditProfileComponent from './Components/EditProfile/EditProfileComponent';
 import ExistingUsersComponent from './Components/ExistingUsers/ExistingUsersComponent';
 import EditExistingUserComponent from './Components/EditExistingUser/EditExistingUserComponent';
-import ExistingUserComponent from './Components/ExistingCameras/ExistingCamerasComponent';
 import EditExistingCameraComponent from './Components/EditExistingCamera/EditExistingCameraComponent';
 import ExistingCamerasComponent from './Components/ExistingCameras/ExistingCamerasComponent';
 import AddNewCameraComponent from './Components/AddNewCamera/AddNewCameraComponent';
 import AlertBoxComponent from './Components/AlertBox/AlertBoxComponent';
 
+// creating the context for alertbox with promises
+const AlertBoxContext =	React.createContext(Promise.reject);
 
-export const AlertBoxContext =	React.createContext();
+// exporting the alertbox context
+export const AlertBox = ()=>React.useContext(AlertBoxContext);
 
-const initialAlertBoxObject={
-	'alertBoxDetails':{},
+
+
+
+const initialAlertBoxValue={
+	
+	'alertTitle':'',
+	'alertText':'',
+	'alertBox':{
+				'type':'',
+				'cancelButtonText':'',
+				'okButtonText':''
+			},
+	'duration':0,
 	'alertBoxDisplayState':false
 }
+
 
 const alertBoxReducerFunction=(previousAlertBoxObject,currentAlertBoxObject) =>
 {
@@ -34,18 +48,45 @@ const alertBoxReducerFunction=(previousAlertBoxObject,currentAlertBoxObject) =>
 }
 
 
+
 function App() {
   
-  const [alertBoxObject,alertBoxDetailsFunction]= useReducer(alertBoxReducerFunction,initialAlertBoxObject);
+  	const [alertBoxObject,setAlertBoxDetailsFunction] =  useReducer(alertBoxReducerFunction,initialAlertBoxValue);
   
-  //const alertBoxUpdateHandler=(newAlertBoxDetails)=> (alertBoxDetailsFunction(newAlertBoxDetails) );
+  	const awaitingPromiseRef = useRef();
   
+  	const openConfirmation = (alertBoxDetails) => {
+  	
+		setAlertBoxDetailsFunction(alertBoxDetails);
+	
+		return new Promise((resolve, reject) => {
+		    awaitingPromiseRef.current = { resolve, reject };
+		});
+	
+	};
+	
+	const handleClose = () => {
+		if (awaitingPromiseRef.current) {
+		    awaitingPromiseRef.current.reject();
+		}
+		setAlertBoxDetailsFunction(initialAlertBoxValue);
+	};
+	
+	const handleSubmit = () => {
+		if (awaitingPromiseRef.current) {
+		    awaitingPromiseRef.current.resolve();
+		}
+		setAlertBoxDetailsFunction(initialAlertBoxValue);
+	};
+
   return (
     	<>
-    		<AlertBoxComponent {...alertBoxObject} alertBoxHandler={alertBoxDetailsFunction}/>
+    		<AlertBoxComponent 
+    		alertBoxDetails={alertBoxObject} 
+    		onSubmit={handleSubmit}
+    		onClose={handleClose}/>
     		<AlertBoxContext.Provider 
-    			value ={ {alertBoxObject : alertBoxObject,
-    				alertBoxDetailsFunction:alertBoxDetailsFunction}}>
+    			value ={openConfirmation}>
 				<Routes>
 					<Route path="/" element={<LoginPageComponent/>}/>
 					<Route path="/home" element={<HomePageComponent/>}/>

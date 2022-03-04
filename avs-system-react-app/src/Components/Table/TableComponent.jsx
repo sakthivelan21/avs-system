@@ -1,52 +1,55 @@
-import React,{useContext} from 'react';
+import React from 'react';
 import './TableComponent.css';
 import ButtonComponent from '../Button/ButtonComponent';
 import {useNavigate} from 'react-router-dom';
-import {AlertBoxContext} from '../../App';
+import {AlertBox} from '../../App';
 function TableComponent(props)
 {
 	const {tableDetails,tableRowDetails}=props;
 	const navigate=useNavigate();
 	
-	const alertBox = useContext(AlertBoxContext);
+	const alertBox = AlertBox();
 	
 	const deleteUser = ()=> {
 	 	
-	 	let alertDetailsObject={
-			'alertBoxDetails':{
-				'alertTitle':'Do you want to remove the User ?',
-				'alertText':'user will be removed from the database...',
-				'alertBox':{
-						'type':'choice',
-						'cancelButtonText':'Cancel',
-						'confirmButtonText':'Remove',
-						'buttonState':false
-					}
-			},
+	 	let alertDetailsObject=
+			{
+			'alertTitle':'Do you want to remove the User ?',
+			'alertText':'user will be removed from the database...',
+			'alertBox':{
+					'type':'choice',
+					'cancelButtonText':'Cancel',
+					'okButtonText':'Remove',
+					'buttonState':false
+				},
+			'duration':0,
 			'alertBoxDisplayState':true
-		};
+			};
 	 		
-	 	alertBox.alertBoxDetailsFunction(alertDetailsObject);
-	 
+	 	alertBox(alertDetailsObject)
+	 		.then(()=>console.log('alertbox delete details triggered'))
+	 		.catch(()=>console.log('alertbox cancel delete user triggered'));
 	 };
 	
 	const deleteCamera = () => { 
 		
-		let alertDetailsObject={
-			'alertBoxDetails':{
+		let alertDetailsObject=
+			{
 				'alertTitle':'Do you want to remove the Camera ?',
 				'alertText':'user will be removed from the database...',
 				'alertBox':{
 						'type':'choice',
 						'cancelButtonText':'Cancel',
-						'confirmButtonText':'Remove',
-						'buttonState':false
-					}
-			},
-			'alertBoxDisplayState':true
-		};
+						'okButtonText':'Remove',
+
+					},
+				'duration':0,
+				'alertBoxDisplayState':true
+			};
 		
-		alertBox.alertBoxDetailsFunction(alertDetailsObject);
+		alertBox(alertDetailsObject)
+			.then(()=>console.log('alertbox delete camera triggered'))
+			.catch(()=>console.log('alertbox cancel delete camera triggered'));
 	
 	};
 	
