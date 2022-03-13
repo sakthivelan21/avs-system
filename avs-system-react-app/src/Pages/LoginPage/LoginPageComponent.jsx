@@ -1,18 +1,22 @@
 import React,{useState,useCallback,useEffect,useRef} from 'react';
-import { Link} from 'react-router-dom';
+import { Link,useNavigate,useLocation} from 'react-router-dom';
 
 import './LoginPageComponent.css';
 import InputComponent from '../../Components/Input/InputComponent';
 import ButtonComponent from '../../Components/Button/ButtonComponent';
-
+import {useAuth} from '../../Components/Auth/AuthProvider';
 
 
 export default function LoginPageComponent()
 {
 	const [username,setUsername]=useState('');
 	const [password,setPassword]=useState('');
-		
+	
+	const auth = useAuth();
+	const navigate = useNavigate();
+	const location = useLocation();
 	const inputRef=useRef(null);
+	const redirectPath = location.state?.path || '/home'
 	
 	useEffect(()=>{
 		inputRef.current.focus();
@@ -29,6 +33,9 @@ export default function LoginPageComponent()
 	const submitHandler=(event)=>{
 		event.preventDefault();
 		console.log(username,password);
+		auth.login(username);
+		navigate(redirectPath,{replace:true});
+		
 	}
 	console.log('rendering Login PageComponent');
 	return(

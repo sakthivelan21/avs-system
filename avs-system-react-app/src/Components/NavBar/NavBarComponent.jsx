@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
 import './NavBarComponent.css';
-import { NavLink,Link} from 'react-router-dom';
+import { NavLink,Link,useNavigate} from 'react-router-dom';
 import ButtonComponent from '../Button/ButtonComponent';
+import {useAuth} from '../Auth/AuthProvider';
 function NavBarComponent()
 {
 	const [navMidSectionState,setNavMidSectionState]=useState(false);
@@ -11,8 +12,14 @@ function NavBarComponent()
 		setNavMidSectionState(state);
 	}
 	
+	const auth = useAuth();
+	const navigate = useNavigate();
+	
 	const logOutHandler=()=>{
+		
 		console.log('logout');
+		auth.logout();
+		navigate("/")
 	}
 	
 	console.log("Rendering nav bar component");

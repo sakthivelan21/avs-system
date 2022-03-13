@@ -17,6 +17,8 @@ import EditExistingCameraComponent from './Components/EditExistingCamera/EditExi
 import ExistingCamerasComponent from './Components/ExistingCameras/ExistingCamerasComponent';
 import AddNewCameraComponent from './Components/AddNewCamera/AddNewCameraComponent';
 import AlertBoxComponent from './Components/AlertBox/AlertBoxComponent';
+import {AuthProvider} from './Components/Auth/AuthProvider';
+import {RequiredAuth} from './Components/Auth/RequiredAuth';
 
 // creating the context for alertbox with promises
 const AlertBoxContext =	React.createContext(Promise.reject);
@@ -81,29 +83,52 @@ function App() {
 
   return (
     	<>
-    		<AlertBoxComponent 
-    		alertBoxDetails={alertBoxObject} 
-    		onSubmit={handleSubmit}
-    		onClose={handleClose}/>
-    		<AlertBoxContext.Provider 
-    			value ={openConfirmation}>
-				<Routes>
-					<Route path="/" element={<LoginPageComponent/>}/>
-					<Route path="/home" element={<HomePageComponent/>}/>
-					<Route path="/signup" element={<SignupPageComponent/>}/>
-					<Route path="/add-user" element={<AddUserPageComponent/>} />
-					<Route path="/settings" element={<SettingsPageComponent/>}>
-						<Route path='' element={<AccountDetailsComponent/>}/>
-						<Route path='edit-profile' element={<EditProfileComponent/>}/>
-						<Route path='existing-users' element={<ExistingUsersComponent/>}/>
-						<Route path="edit-existing-user" element={<EditExistingUserComponent/>}/>
-						<Route path='existing-cameras' element={<ExistingCamerasComponent/>}/>
-						<Route path="edit-existing-camera" element={<EditExistingCameraComponent/>}/>
-						<Route path="add-new-camera" element={<AddNewCameraComponent/>}/>
-					</Route>
-					<Route path="*" element={<LoginPageComponent/>}/>
-				</Routes>
-			</AlertBoxContext.Provider>
+    		<AuthProvider>
+				<AlertBoxComponent 
+				alertBoxDetails={alertBoxObject} 
+				onSubmit={handleSubmit}
+				onClose={handleClose}/>
+				<AlertBoxContext.Provider 
+					value ={openConfirmation}>
+					<Routes>
+						<Route path="/" element={<LoginPageComponent/>}/>
+						<Route 
+							path="/home" 
+							element={
+							<RequiredAuth>
+								<HomePageComponent/>
+							</RequiredAuth>
+							}
+						/>
+						<Route path="/signup" element={<SignupPageComponent/>}/>
+						<Route 
+							path="/add-user" 
+							element={
+							<RequiredAuth>
+								<AddUserPageComponent/>
+							</RequiredAuth>
+							} 
+						/>
+						<Route 
+						path="/settings" 
+						element={
+						<RequiredAuth>
+							<SettingsPageComponent/>
+						</RequiredAuth>
+						}
+						>
+							<Route path='' element={<AccountDetailsComponent/>}/>
+							<Route path='edit-profile' element={<EditProfileComponent/>}/>
+							<Route path='existing-users' element={<ExistingUsersComponent/>}/>
+							<Route path="edit-existing-user" element={<EditExistingUserComponent/>}/>
+							<Route path='existing-cameras' element={<ExistingCamerasComponent/>}/>
+							<Route path="edit-existing-camera" element={<EditExistingCameraComponent/>}/>
+							<Route path="add-new-camera" element={<AddNewCameraComponent/>}/>
+						</Route>
+						<Route path="*" element={<LoginPageComponent/>}/>
+					</Routes>
+				</AlertBoxContext.Provider>
+			</AuthProvider>
     	</>
   );
 }
