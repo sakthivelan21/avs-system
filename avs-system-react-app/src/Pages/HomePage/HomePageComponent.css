@@ -5,9 +5,16 @@
 	flex-direction:row;
 	justify-content:space-evenly;
 	background:var(--primary-dark);
-	padding-top:50px;
+	padding-top:80px;
 }
 
+.home-info
+{
+	color:var(--primary-white);
+	font-weight:500;
+	font-size:1.5rem;
+	text-align:center;
+}
 @media screen and (max-width: 900px){
 	#home-page
 	{

@@ -1,37 +1,49 @@
-import React from 'react';
+import React,{useState,useEffect,useCallback} from 'react';
 import './ExistingUsersComponent.css';
-
+import { getAllUsers} from "../../utils/Request.js";
 import TableComponent from '../Table/TableComponent';
 
 function ExistingUsersComponent()
 {
+	const [userDetails,setUserDetails] = useState([]);
 	const tableDetails={
 		"tableHeadings":[
 		"Id",
 		"Name",
 		"Worker Type",
 		"Designation",
-		"Phone No",
-		"Mail Id",
 		"Actions"],
 		"actionEditLink":"/settings/edit-existing-user",
 		"tableType":"userDetails"
 	};
-	const tableRowDetails=[
-		{
-			"id":1,
-			"name":"Sakthi velan",
-			"userType":"Normal User",
-			"designation":"Software Engineer",
-			"phoneNo":1234567890,
-			"mailId":"sakthi@gmail.com",
-			
-		}
-	]
+	
+	const fetchUserDetails=useCallback( ()=>
+	{
+		getAllUsers().then(
+			(responseData) =>{
+				console.log(responseData);
+				setUserDetails(responseData.allUsers );
+			}
+		).catch(
+			(error) =>{
+				console.log(error);
+				console.log('error occured at fetching camera details');
+			}
+		);		
+	},[]);
+	// fetching the data from the server while component mount
+	useEffect(()=>{
+		fetchUserDetails();	
+	},[fetchUserDetails]);
+	
 	return(
 		<div id="existing-users-component">
 			<p className="title"> <span><i className="fas fa-user-edit"></i></span> Existing users</p>
-			<TableComponent tableDetails={tableDetails} tableRowDetails={tableRowDetails}/>
+			{
+				(userDetails.length>0)?
+				<TableComponent tableDetails={tableDetails} tableRowDetails={userDetails} updateTableDetails={()=>fetchUserDetails()}/>:
+				<p className="detailed-info">  Add New User To see the User Details </p>
+			}
 		</div>
 	);
 	

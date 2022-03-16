@@ -3,7 +3,7 @@
 from flask import Blueprint,request,make_response,jsonify
 # for safely storing password and checking them
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import uuid
 import json
 # importing json web tokens to secure the back end
 import jwt
@@ -73,7 +73,7 @@ def login():
     )
 
 # CRUD Operations On Admin Model
-@bp.route('/addAdmin',methods=['POST'])
+@bp.route('/signup',methods=['POST'])
 def addAdmin():
 
 	data = request.json
@@ -86,6 +86,7 @@ def addAdmin():
 	if not admin:
 		try:
 			admin = AdminModel(
+				id = str(uuid.uuid4()),
 				name=name,
 			    username=username,
 			    password=generate_password_hash(password),
@@ -98,17 +99,16 @@ def addAdmin():
 			print(e)
 			return make_response(jsonify({"success":False,"message":"error at saving in database!! try again after some time !!"}),202)
 	else:
-		return make_response(jsonify({"success": False, "message": 'User already exists. Please Log in'}), 202)
+		return make_response(jsonify({"success": False, "message": 'User Name already exists. Please Try a different user name'}), 202)
 	
 @bp.route('/getAdminDetails',methods=['GET'])
 @token_required
 def getAdminById(current_admin_id):
 	admin = AdminModel.query.get_or_404(current_admin_id)
 	return make_response(jsonify(
-		{"id":admin.id,
+		{
 		"name":admin.name,
 		"username":admin.username,
-		"password":admin.password,
 		"organisationName":admin.organisationName}),200)   	
 
 @bp.route('/getAllAdmin',methods=['GET'])

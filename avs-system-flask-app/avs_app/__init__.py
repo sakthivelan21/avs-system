@@ -1,10 +1,8 @@
 # import flask, flask_sqlalchemy
-from flask import Flask
+from flask import Flask,send_from_directory
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
-
-
-import uuid
 # importing inbuilt python modules
 from os import path
 
@@ -13,7 +11,8 @@ from os import path
 # creating an instance for database as db with the help of SQLAlchemy
 db = SQLAlchemy()
 DB_NAME = "database.db"
-app=Flask(__name__)
+#UPLOAD_FOLDER = 'static/uploads'
+app=Flask(__name__,static_folder="static/uploads")
 
 # to get initialized app instance
 def initialize_app():
@@ -24,6 +23,11 @@ def initialize_app():
 
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 	
+	#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+	
+	app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+	
+		
 	db.init_app(app)
 	
 	#always import blueprint after db.init_app(app) to remove module import problems
@@ -36,6 +40,16 @@ def initialize_app():
 	app.register_blueprint(camera.bp,url_prefix='/camera')
 	app.register_blueprint(user.bp,url_prefix='/user')
 	# creating the database if not exists
+	
+	cors=CORS(resources={
+    r'/*': {
+        'origins': [
+            'http://localhost:3000'
+        ]
+    }
+	})
+	cors.init_app(app)
+	
 	create_database(app)
 	return app
 
@@ -43,7 +57,3 @@ def create_database(app):
     if not path.exists('avs-app/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
-
-def generate_uuid():
-    return str(uuid.uuid4())
-

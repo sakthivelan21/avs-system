@@ -4,7 +4,7 @@
 	width:45%;
 	border-radius:10px;
 	background:var(--primary-white);
-	
+	margin-top:8%;
 }
 
 #add-user-form
@@ -15,8 +15,8 @@
 #add-user-image
 {
 	margin:10px auto;
-	width:80px;
-	height:80px;
+	width:150px;
+	height:150px;
 	display:block;
 }
 
@@ -75,6 +75,7 @@ input[type=file]::file-selector-button:hover {
 	#add-user-page
 	{
 		width:65%;
+		margin-top:15%;
 	}
 }
 
@@ -82,6 +83,7 @@ input[type=file]::file-selector-button:hover {
 	#add-user-page
 	{
 		width:95%;
+		margin-top:20%;
 	}
 }
 

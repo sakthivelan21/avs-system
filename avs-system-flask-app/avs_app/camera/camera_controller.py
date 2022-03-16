@@ -1,6 +1,7 @@
 # Blueprint allow us to define the blueprint to the application
 # which tells it has some routes for application and helps us to organize the code
 from flask import Blueprint,request,make_response,jsonify
+import uuid
 
 from avs_app import db
 from avs_app.admin.admin_controller import token_required
@@ -15,24 +16,30 @@ bp = Blueprint('CameraController',__name__)
 @token_required
 def addCamera(current_admin_id):
 	request_data = request.json
-	try:
-		camera = CameraModel(
-			name = request_data.get('name'),
-		    location = request_data.get('location'),
-		    password = request_data.get('password'),
-		    admin_id = current_admin_id
-		)
-		db.session.add(camera)
-		db.session.commit()
-		return make_response(jsonify({"success": True, "message": "Camera Sucessfully Added"}), 201)
-	except Exception as e:
-		print(e)
-		return make_response(jsonify({"success":False,"message":"error at saving in database!! try again after some time !!"}),202)
+	
+	camera = CameraModel.query.filter_by(name=request_data.get('name')).first()
+	if not camera:
+		try:
+			camera = CameraModel(
+				id = str(uuid.uuid4()),
+				name = request_data.get('name'),
+				location = request_data.get('location'),
+				password = request_data.get('password'),
+				adminId = current_admin_id
+			)
+			db.session.add(camera)
+			db.session.commit()
+			return make_response(jsonify({"success": True, "message": "Camera Sucessfully Added"}), 201)
+		except Exception as e:
+			print(e)
+			return make_response(jsonify({"success":False,"message":"error at saving in database!! try again after some time !!"}),202)
+	else:
+		return make_response(jsonify({"success": False, "message": 'Camera Name already exists. Please Try a different user name'}), 202)
 
 @bp.route('/getAllCamerasByAdminId',methods=['GET'])
 @token_required
 def getAllCameras(current_admin_id):
-	allCameras=CameraModel.query.filter(CameraModel.admin_id==current_admin_id).all()
+	allCameras=CameraModel.query.filter(CameraModel.adminId==current_admin_id).all()
 	cameraDictArray=[]
 	for camera in allCameras:
 		cameraDictArray.append(
@@ -40,8 +47,6 @@ def getAllCameras(current_admin_id):
 			"id":camera.id,
 			"name":camera.name,
 			"location":camera.location,
-			"password":camera.password,
-			"admin_id":camera.admin_id
 			}
 		)
 	return make_response(jsonify({"allCameras": cameraDictArray}), 200)
@@ -54,15 +59,13 @@ def getCameraById(current_admin_id,camera_id):
 			"id":camera.id,
 			"name":camera.name,
 			"location":camera.location,
-			"password":camera.password,
-			"admin_id":camera.admin_id
 			}), 200)
 	
-@bp.route('/updateCameraById',methods=['PUT'])
+@bp.route('/updateCameraDetails',methods=['PUT'])
 @token_required
 def updateCameraById(current_admin_id):
 	new_camera_data = request.json
-	camera = CameraModel.query.filter(CameraModel.admin_id==current_admin_id,CameraModel.id==new_camera_data.get('id')).one()
+	camera = CameraModel.query.filter(CameraModel.adminId==current_admin_id,CameraModel.id==new_camera_data.get('id')).one()
 	try:
 		camera.name = new_camera_data.get('name')
 		camera.location = new_camera_data.get('location')

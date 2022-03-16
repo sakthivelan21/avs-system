@@ -13,7 +13,7 @@ function AlertBoxComponent(props)
 		
 			if(alertBoxDetails.duration && alertBoxDetails.duration!==0 && 
 					alertBoxDetails.alertBox.type!=='choice')
-				setInterval(onClose,alertBoxDetails.duration);
+				setTimeout(onClose,alertBoxDetails.duration);
 		
 	},[alertBoxDetails,onClose]);
 	

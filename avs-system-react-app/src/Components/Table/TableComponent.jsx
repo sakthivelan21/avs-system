@@ -3,14 +3,36 @@ import './TableComponent.css';
 import ButtonComponent from '../Button/ButtonComponent';
 import {useNavigate} from 'react-router-dom';
 import {AlertBox} from '../../App';
+import { deleteCameraById ,deleteUserById} from '../../utils/Request.js';
 function TableComponent(props)
 {
-	const {tableDetails,tableRowDetails}=props;
+	const {tableDetails,tableRowDetails,updateTableDetails}=props;
 	const navigate=useNavigate();
 	
 	const alertBox = AlertBox();
 	
-	const deleteUser = ()=> {
+	const alertMessageHandler=(title,message)=>
+	{
+		let alertDetailsObject=
+		   {
+			'alertTitle':title,
+			'alertText':message,
+			'alertBox':{
+					'type':'alert',
+					'cancelButtonText':'',
+					'okButtonText':'Ok',
+					'buttonState':false
+				},
+			'duration':3000,
+			'alertBoxDisplayState':true
+			};
+	 		
+	 	alertBox(alertDetailsObject)
+	 		.then(()=>console.log('alertbox is closed'))
+	 		.catch(()=>console.log('closing the alert box'));
+	}
+	
+	const deleteUser = (userId)=> {
 	 	
 	 	let alertDetailsObject=
 			{
@@ -27,11 +49,26 @@ function TableComponent(props)
 			};
 	 		
 	 	alertBox(alertDetailsObject)
-	 		.then(()=>console.log('alertbox delete details triggered'))
-	 		.catch(()=>console.log('alertbox cancel delete user triggered'));
+			.then(()=>{
+				console.log('alertbox delete user triggered');
+				deleteUserById(userId).then(
+					(responseData) =>{
+						console.log(responseData);
+						alertMessageHandler(responseData.message,"please check the exisiting user table removed");
+						updateTableDetails();
+					}
+				).catch(
+					(error) =>{
+						console.log(error);
+						alertMessageHandler(error.response.message,"please try again after some time");
+					}
+				);	
+				
+			})
+			.catch(()=>console.log('alertbox cancel delete user triggered'));
 	 };
 	
-	const deleteCamera = () => { 
+	const deleteCamera = (cameraId) => { 
 		
 		let alertDetailsObject=
 			{
@@ -48,17 +85,29 @@ function TableComponent(props)
 			};
 		
 		alertBox(alertDetailsObject)
-			.then(()=>console.log('alertbox delete camera triggered'))
+			.then(()=>{
+				console.log('alertbox delete camera triggered');
+				deleteCameraById(cameraId).then(
+					(responseData) =>{
+						console.log(responseData);
+						alertMessageHandler(responseData.message,"please check the table camera removed");
+						updateTableDetails();
+					}
+				).catch(
+					(error) =>{
+						console.log(error);
+						alertMessageHandler(error.response.message,"please try again after some time");
+					}
+				);	
+				
+			})
 			.catch(()=>console.log('alertbox cancel delete camera triggered'));
 	
 	};
 	
 	
 	// passing data to another route through react router
-	const editHandler=(userDetail,path)=>
-	{
-		navigate(path,{state:userDetail});
-	}
+	const editHandler=(path)=>navigate(path);
 	return(
 		<div className="info-table-container">
 				<table className="info-table">
@@ -74,28 +123,26 @@ function TableComponent(props)
 					<tbody>
 						{
 						(tableDetails.tableType==="userDetails")?
-						tableRowDetails.map((userDetail)=>{
+						tableRowDetails.map((userDetail,index)=>{
 							return(
 							<tr key={userDetail.id}>
-								<td>{userDetail.id}</td>
+								<td>{index+1}</td>
 								<td>{userDetail.name}</td>
-								<td>{userDetail.userType}</td>
 								<td>{userDetail.designation}</td>
-								<td>{userDetail.phoneNo}</td>
-								<td>{userDetail.mailId}</td>
+								<td>{userDetail.workerType}</td>
 								<td>
 									
 										<ButtonComponent 
 										type="table-button" 
 										classProp="table-button"
 										clickHandler={()=>
-										editHandler(userDetail,tableDetails.actionEditLink)}>
+										editHandler(tableDetails.actionEditLink+"/"+userDetail.id)}>
 											Edit <i className="fas fa-edit"></i>
 										</ButtonComponent>
 										<ButtonComponent 
 										type="table-button" 
 										classProp="table-button"
-										clickHandler={deleteUser}>
+										clickHandler={()=>deleteUser(userDetail.id)}>
 											Delete <i className="fas fa-solid fa-trash"></i>
 										</ButtonComponent>
 									
@@ -104,10 +151,10 @@ function TableComponent(props)
 							)
 						})
 						:
-						tableRowDetails.map((cameraDetails)=>{
+						tableRowDetails.map((cameraDetails,index)=>{
 							return(
 								<tr key={cameraDetails.id}>
-									<td>{cameraDetails.id}</td>
+									<td>{index+1}</td>
 									<td>{cameraDetails.name}</td>
 									<td>{cameraDetails.location}</td>
 									<td>
@@ -116,13 +163,13 @@ function TableComponent(props)
 											type="table-button" 
 											classProp="table-button" 	
 											clickHandler={()=>
-											editHandler(cameraDetails,tableDetails.actionEditLink)}>
+											editHandler(tableDetails.actionEditLink+"/"+cameraDetails.id)}>
 											Edit <i className="fas fa-edit"></i>
 										</ButtonComponent>
 										<ButtonComponent 
 											type="table-button" 
 											classProp="table-button"
-											clickHandler={deleteCamera}>
+											clickHandler={()=>deleteCamera(cameraDetails.id)}>
 											Remove <i className="fas fa-solid fa-trash"></i>
 										</ButtonComponent>
 									

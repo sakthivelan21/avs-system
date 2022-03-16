@@ -1,16 +1,34 @@
-import React,{useState,useCallback,useEffect,useRef} from 'react';
+import React,{useReducer,useCallback,useEffect,useRef} from 'react';
 import { Link,useNavigate,useLocation} from 'react-router-dom';
 
+import {AlertBox} from "../../App";
+import { loginRequest} from "../../utils/Request.js";
 import './LoginPageComponent.css';
 import InputComponent from '../../Components/Input/InputComponent';
 import ButtonComponent from '../../Components/Button/ButtonComponent';
 import {useAuth} from '../../Components/Auth/AuthProvider';
 
+const initialValue={
+	username:'',
+	password:''
+}
+
+const reducerFunction=(state,action)=>{
+	return{...state,[action.name]:action.value}
+}
 
 export default function LoginPageComponent()
 {
-	const [username,setUsername]=useState('');
-	const [password,setPassword]=useState('');
+	const alertBox = AlertBox();
+	
+	const [loginDetails,dispatchFunction]=useReducer(reducerFunction,initialValue);
+
+	const {username,password}=loginDetails;
+	
+	const updateLoginDetails=useCallback((event)=>{
+		dispatchFunction({'name':event.target.name,'value':event.target.value});
+	},[])
+
 	
 	const auth = useAuth();
 	const navigate = useNavigate();
@@ -22,19 +40,43 @@ export default function LoginPageComponent()
 		inputRef.current.focus();
 	},[]);
 	
-	const updateUsername=useCallback((event)=>{
-		setUsername(event.target.value)
-	},[])
 	
-	const updatePassword=useCallback((event)=>{
-		setPassword(event.target.value)
-	},[])
 
 	const submitHandler=(event)=>{
 		event.preventDefault();
-		console.log(username,password);
-		auth.login(username);
-		navigate(redirectPath,{replace:true});
+		console.log(loginDetails);
+		
+		// sending the login request to flask server
+		loginRequest(loginDetails).then(
+			(responseData) =>{
+				// setting the auth token
+				auth.login(responseData.token);
+				console.log(responseData);
+				// navigating to home
+				navigate(redirectPath,{replace:true});
+			}
+		).catch(
+			(error) =>{
+				console.log(error.response.data.message);
+				let alertDetailsObject=
+				   {
+					'alertTitle':error.response.data.message,
+					'alertText':'Please enter correct username and password to login...',
+					'alertBox':{
+							'type':'alert',
+							'cancelButtonText':'',
+							'okButtonText':'Ok',
+							'buttonState':false
+						},
+					'duration':2000,
+					'alertBoxDisplayState':true
+					};
+			 		
+			 	alertBox(alertDetailsObject)
+			 		.then(()=>console.log('alertbox is closed'))
+			 		.catch(()=>console.log('closing the alert box'));
+			}
+		);		
 		
 	}
 	console.log('rendering Login PageComponent');
@@ -49,7 +91,7 @@ export default function LoginPageComponent()
 						<InputComponent 
 							iconClass="fa fa-user"
 							name="username" 
-							onChange={updateUsername} 
+							onChange={updateLoginDetails} 
 							type="text"
 							extraConditions={{}}
 							inputRef={inputRef}
@@ -58,7 +100,7 @@ export default function LoginPageComponent()
 						<InputComponent 
 							iconClass="fa fa-key"
 							name="password" 
-							onChange={updatePassword} 
+							onChange={updateLoginDetails} 
 							type="password"
 							inputRef={null}
 							extraConditions={{}}

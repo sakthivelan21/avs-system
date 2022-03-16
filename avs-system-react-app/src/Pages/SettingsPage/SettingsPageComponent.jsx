@@ -8,6 +8,7 @@ export default function SettingsPageComponent()
 {
 	
 	const location=useLocation();
+	
 	const navLinkList=[
 		{
 			'link':'/settings',
@@ -30,6 +31,7 @@ export default function SettingsPageComponent()
 			'content':'Add a New Camera'
 		}
 	];
+	
 	return (
 		<>
 			<NavBarComponent/>

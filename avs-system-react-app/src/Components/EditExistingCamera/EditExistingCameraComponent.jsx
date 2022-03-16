@@ -1,9 +1,16 @@
 import './EditExistingCameraComponent.css';
 import React,{useCallback,useEffect,useRef,useReducer} from 'react';
-import {Link,useLocation} from 'react-router-dom';
+import {Link,useParams} from 'react-router-dom';
 import InputComponent from '../Input/InputComponent';
 import ButtonComponent from '../Button/ButtonComponent';
-
+import {AlertBox} from "../../App";
+import {getCameraById,updateCameraDetails} from "../../utils/Request";
+const initialValue={
+	id:'',
+	name:'',
+	location:'',
+	password:''
+}
 
 const reducerFunction=(state,action)=>{
 	return{...state,[action.name]:action.value}
@@ -11,32 +18,83 @@ const reducerFunction=(state,action)=>{
 
 function EditExistingCameraComponent()
 {
+	const alertBox = AlertBox();
 	
 	console.log('rendering EditExistingCameraComponent');
 	
-	const locationHook=useLocation();
+	const {cameraId}=useParams();
 	
-	console.log('got the data through react router');
-	console.log(locationHook.state);
+	const [cameraDetails,dispatchFunction]=useReducer(reducerFunction,initialValue);
 	
-	const [state,dispatchFunction]=useReducer(reducerFunction,locationHook.state);
-	
-	const {name,location,password}=state
+	const {name,location,password}=cameraDetails
 		
 	const inputRef=useRef(null);
 	
+	const alertMessageHandler=(title,message)=>
+	{
+		let alertDetailsObject=
+		   {
+			'alertTitle':title,
+			'alertText':message,
+			'alertBox':{
+					'type':'alert',
+					'cancelButtonText':'',
+					'okButtonText':'Ok',
+					'buttonState':false
+				},
+			'duration':3000,
+			'alertBoxDisplayState':true
+			};
+	 		
+	 	alertBox(alertDetailsObject)
+	 		.then(()=>console.log('alertbox is closed'))
+	 		.catch(()=>console.log('closing the alert box'));
+	}
+	
 	useEffect(()=>{
 		inputRef.current.focus();
-		
-	},[]);
+		getCameraById(cameraId).then(
+			(responseData) =>{
+				console.log(responseData);
+				dispatchFunction({'name':'name','value':responseData.name});
+				dispatchFunction({'name':'location','value':responseData.location});	
+				dispatchFunction({'name':'id','value':responseData.id});
+			}
+		).catch(
+			(error) =>{
+				console.log(error);
+				console.log('error occured at fetching camera details');
+			}
+		);
+	},[cameraId]);
 	
 	const updateUserDetails=useCallback((event)=>{
 		dispatchFunction({'name':event.target.name,'value':event.target.value});
 	},[])
 	
 	const submitHandler=(event)=>{
-	event.preventDefault();
-	console.log(state);
+		event.preventDefault();
+		console.log(cameraDetails);
+		
+		// updating the camera details to flask server
+		updateCameraDetails(cameraDetails).then(
+			(responseData) =>{
+				console.log(responseData);
+				if(responseData.success)
+				{
+					alertMessageHandler(responseData.message,"Camera Details updated Successfully !!!");
+				}
+				else
+				{
+					alertMessageHandler(responseData.message,"please follow this instruction to update the camera details");			
+				}
+			}
+		).catch(
+			(error) =>{
+				console.log(error.response.data.message);
+					alertMessageHandler(error.response.data.message,"please try after some time");
+			}
+		);
 	}
 		
 	return(

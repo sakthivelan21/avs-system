@@ -120,9 +120,9 @@ function App() {
 							<Route path='' element={<AccountDetailsComponent/>}/>
 							<Route path='edit-profile' element={<EditProfileComponent/>}/>
 							<Route path='existing-users' element={<ExistingUsersComponent/>}/>
-							<Route path="edit-existing-user" element={<EditExistingUserComponent/>}/>
+							<Route path="edit-existing-user/:userId" element={<EditExistingUserComponent/>}/>
 							<Route path='existing-cameras' element={<ExistingCamerasComponent/>}/>
-							<Route path="edit-existing-camera" element={<EditExistingCameraComponent/>}/>
+							<Route path="edit-existing-camera/:cameraId" element={<EditExistingCameraComponent/>}/>
 							<Route path="add-new-camera" element={<AddNewCameraComponent/>}/>
 						</Route>
 						<Route path="*" element={<LoginPageComponent/>}/>

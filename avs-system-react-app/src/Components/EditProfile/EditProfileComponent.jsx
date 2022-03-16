@@ -1,7 +1,8 @@
 import React,{useCallback,useEffect,useRef,useReducer} from 'react';
 import {Link} from 'react-router-dom';
-
+import {AlertBox} from "../../App";
 import './EditProfileComponent.css';
+import { getProfileDetails,updateProfileDetails} from "../../utils/Request.js";
 import InputComponent from '../Input/InputComponent';
 import ButtonComponent from '../Button/ButtonComponent';
 
@@ -18,18 +19,36 @@ const reducerFunction=(state,action)=>{
 
 function EditProfileComponent()
 {
+	const alertBox = AlertBox();
 	
 	console.log('rendering EditProfileComponent');
 	
-	const [state,dispatchFunction]=useReducer(reducerFunction,initialValue);
+	const [userDetails,dispatchFunction]=useReducer(reducerFunction,initialValue);
 	
-	const {name,organisationName,username,password}=state
+	const {name,organisationName,username,password}=userDetails
 		
 	const inputRef=useRef(null);
 	
-	useEffect(()=>{
-		inputRef.current.focus();
-	},[]);
+	const alertMessageHandler=(title,message)=>
+	{
+		let alertDetailsObject=
+		   {
+			'alertTitle':title,
+			'alertText':message,
+			'alertBox':{
+					'type':'alert',
+					'cancelButtonText':'',
+					'okButtonText':'Ok',
+					'buttonState':false
+				},
+			'duration':3000,
+			'alertBoxDisplayState':true
+			};
+	 		
+	 	alertBox(alertDetailsObject)
+	 		.then(()=>console.log('alertbox is closed'))
+	 		.catch(()=>console.log('closing the alert box'));
+	}
 	
 	const updateUserDetails=useCallback((event)=>{
 		dispatchFunction({'name':event.target.name,'value':event.target.value});
@@ -37,9 +56,46 @@ function EditProfileComponent()
 	
 	const submitHandler=(event)=>{
 	event.preventDefault();
-	console.log(state);
+	console.log(userDetails);
+	
+	// updating the profile details to flask server
+	updateProfileDetails(userDetails).then(
+		(responseData) =>{
+			console.log(responseData);
+			if(responseData.success)
+			{
+				alertMessageHandler(responseData.message,"Profile Details updated Successfully !!!");
+			}
+			else
+			{
+				alertMessageHandler(responseData.message,"please follow this instruction to update the user details");			
+			}
+		}
+	).catch(
+		(error) =>{
+			console.log(error.response.data.message);
+				alertMessageHandler(error.response.data.message,"please try after some time");
+		}
+	);
+	
 	}
 		
+	useEffect(()=>{
+		inputRef.current.focus();
+		getProfileDetails().then(
+			(responseData) =>{
+				console.log(responseData);
+				dispatchFunction({'name':'name','value':responseData.name});
+				dispatchFunction({'name':'organisationName','value':responseData.organisationName});
+				dispatchFunction({'name':'username','value':responseData.username});
+			}
+		).catch(
+			(error) =>{
+				console.log(error);
+				console.log('error occured at fetching user details');
+			}
+		);	
+	},[dispatchFunction]);
 	return(
 			<div id="edit-profile-component">
 				<p className="title"> <span><i className="fas fa-user-edit"></i></span> Edit Account Profile</p>

@@ -1,9 +1,9 @@
-import React,{useReducer} from 'react';
+import React,{useReducer,useEffect,useState} from 'react';
 import './HomePageComponent.css';
 import NavBarComponent from '../../Components/NavBar/NavBarComponent';
 import VideoPlayerComponent from '../../Components/VideoPlayer/VideoPlayerComponent';
 import FloatingVideoPlayerComponent from '../../Components/FloatingVideoPlayer/FloatingVideoPlayerComponent';
-
+import { getAllCameras} from "../../utils/Request.js";
 
 const initialFloatingVideoPlayerObject={
 	'cameraDetails':{},
@@ -21,6 +21,8 @@ function HomePageComponent()
 {
 	const [floatingVideoPlayerObject,floatingVideoPlayerDetailsFunction]= useReducer(floatingVideoPlayerReducerFunction,initialFloatingVideoPlayerObject);
 	
+	const [cameraDetails,setCameraDetails] = useState([]);
+	/*
 	const cameraDetails=[
 		{
 			cameraName:'Camera 1',
@@ -40,6 +42,7 @@ function HomePageComponent()
 		}
 		
 	];
+	*/
 	const showFloatingVideoPlayer=(cameraDetail)=>
 	{
 		const floatingVideoPlayerDetails={
@@ -49,6 +52,22 @@ function HomePageComponent()
 		console.log('showing camera');
 		floatingVideoPlayerDetailsFunction(floatingVideoPlayerDetails);
 	}
+	
+	// fetching the data from the server while component mount
+	useEffect(()=>{
+		getAllCameras().then(
+			(responseData) =>{
+				console.log(responseData);
+				setCameraDetails(responseData.allCameras );
+			}
+		).catch(
+			(error) =>{
+				console.log(error);
+				console.log('error occured at fetching camera details');
+			}
+		);		
+
+	},[]);
 	return(
 		<>
 			<FloatingVideoPlayerComponent
@@ -59,16 +78,18 @@ function HomePageComponent()
 			<NavBarComponent/>
 			<div id="home-page">
 				{
+					(cameraDetails.length>0)?
 					cameraDetails.map((cameraDetail,index)=>{
 						return(
 							<VideoPlayerComponent
 								key={index}
-								cameraName={cameraDetail.cameraName}
-								videoLink={cameraDetail.videoLink}
+								cameraName={cameraDetail.name}
+								videoLink={'./video.mp4'}
 								clickHandler={()=>showFloatingVideoPlayer(cameraDetail)}
 							/>
 						);
-					})
+					}):
+					<p className="home-info">Add New Camers in Settings Option to view them</p>
 				}
 			</div>
 		</>)

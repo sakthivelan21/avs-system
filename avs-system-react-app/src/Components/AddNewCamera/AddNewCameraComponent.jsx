@@ -1,8 +1,9 @@
 import React,{useCallback,useEffect,useRef,useReducer} from 'react';
 import './AddNewCameraComponent.css';
+import { addCamera } from '../../utils/Request.js';
 import InputComponent from '../Input/InputComponent';
 import ButtonComponent from '../Button/ButtonComponent';
-
+import {AlertBox} from "../../App";
 const initialValue={
 	name:'',
 	location:'',
@@ -15,17 +16,39 @@ const reducerFunction=(state,action)=>{
 
 function AddNewCameraComponent()
 {
+	const alertBox = AlertBox();
 	
 	console.log('rendering AddNewCameraComponent');
 	
 	
 	console.log('got the data through react router');
 	
-	const [state,dispatchFunction]=useReducer(reducerFunction,initialValue);
+	const [cameraDetails,dispatchFunction]=useReducer(reducerFunction,initialValue);
 	
-	const {name,location,password}=state
+	const {name,location,password}=cameraDetails
 		
 	const inputRef=useRef(null);
+	
+	const alertMessageHandler=(title,message)=>
+	{
+		let alertDetailsObject=
+		   {
+			'alertTitle':title,
+			'alertText':message,
+			'alertBox':{
+					'type':'alert',
+					'cancelButtonText':'',
+					'okButtonText':'Ok',
+					'buttonState':false
+				},
+			'duration':3000,
+			'alertBoxDisplayState':true
+			};
+	 		
+	 	alertBox(alertDetailsObject)
+	 		.then(()=>console.log('alertbox is closed'))
+	 		.catch(()=>console.log('closing the alert box'));
+	}
 	
 	useEffect(()=>{
 		inputRef.current.focus();
@@ -37,8 +60,35 @@ function AddNewCameraComponent()
 	},[])
 	
 	const submitHandler=(event)=>{
-	event.preventDefault();
-	console.log(state);
+		event.preventDefault();
+		console.log(cameraDetails);
+		
+		// sending the signup request to flask server
+		addCamera(cameraDetails).then(
+			(responseData) =>{
+				if(responseData.success)
+				{
+					alertMessageHandler(responseData.message,"new camera details added");
+					dispatchFunction({'name':'name','value':''});
+					dispatchFunction({'name':'location','value':''});
+					dispatchFunction({'name':'password','value':''});
+					console.log('clearing camera details');
+					console.log(cameraDetails);
+				}
+				else
+				{
+					alertMessageHandler(responseData.message,"please follow this instruction to add the camera details");			
+				}
+				console.log(responseData);
+				
+			}
+		).catch(
+			(error) =>{
+				console.log(error.response.data.message);
+				alertMessageHandler(error.response.data.message,"please try after some time");
+			}
+		);
+	
 	}
 		
 	return(

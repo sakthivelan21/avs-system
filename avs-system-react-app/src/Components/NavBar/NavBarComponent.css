@@ -2,6 +2,10 @@
 {
 	background:var(--primary-purple);
 	border-bottom: 2px solid var(--secondary-purple);
+	position:fixed;
+	z-index:1;
+	top:0;
+	width:100%;
 }
 
 .nav-bar-title

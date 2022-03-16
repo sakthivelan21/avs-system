@@ -35,7 +35,7 @@ function FloatingVideoPlayerComponent(props)
 				</div>
 				
 				<video className="floating-video-player"  controls autoPlay loop>
-				  <source src={cameraDetails.videoLink} type="video/mp4" />
+				  <source src={/*cameraDetails.videoLink*/ "./video.mp4"} type="video/mp4" />
 				  Your browser does not support the video tag.
 				</video>
 			</div>
