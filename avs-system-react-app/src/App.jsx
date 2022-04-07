@@ -16,9 +16,11 @@ import EditExistingUserComponent from './Components/EditExistingUser/EditExistin
 import EditExistingCameraComponent from './Components/EditExistingCamera/EditExistingCameraComponent';
 import ExistingCamerasComponent from './Components/ExistingCameras/ExistingCamerasComponent';
 import AddNewCameraComponent from './Components/AddNewCamera/AddNewCameraComponent';
+import CameraLoginPageComponent from './Pages/CameraLoginPage/CameraLoginPageComponent';
 import AlertBoxComponent from './Components/AlertBox/AlertBoxComponent';
 import {AuthProvider} from './Components/Auth/AuthProvider';
 import {RequiredAuth} from './Components/Auth/RequiredAuth';
+import CameraHomePageComponent from './Pages/CameraHomePage/CameraHomePageComponent';
 
 // creating the context for alertbox with promises
 const AlertBoxContext =	React.createContext(Promise.reject);
@@ -100,6 +102,17 @@ function App() {
 							</RequiredAuth>
 							}
 						/>
+
+						<Route 
+							path="/camera-home" 
+							element={
+							<RequiredAuth>
+								<CameraHomePageComponent/>
+							</RequiredAuth>
+							}
+						/>
+
+						<Route path="/camera-login" element={<CameraLoginPageComponent/>}/>
 						<Route path="/signup" element={<SignupPageComponent/>}/>
 						<Route 
 							path="/add-user" 
@@ -124,6 +137,7 @@ function App() {
 							<Route path='existing-cameras' element={<ExistingCamerasComponent/>}/>
 							<Route path="edit-existing-camera/:cameraId" element={<EditExistingCameraComponent/>}/>
 							<Route path="add-new-camera" element={<AddNewCameraComponent/>}/>
+							
 						</Route>
 						<Route path="*" element={<LoginPageComponent/>}/>
 					</Routes>

@@ -1,0 +1,54 @@
+.camera-home-page
+{
+  margin-top:80px;
+}
+.camera-home-page-heading
+{
+    text-align: center;
+    color: var(--primary-grey);
+    position: relative;
+    width: fit-content;
+    font-weight: 500;
+    margin:10px auto;
+    padding:5px;
+    font-size: 1.5rem;
+    line-height: 32px;
+    text-shadow: -2px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.camera-home-page-heading::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    border-bottom: 3px solid var(--secondary-purple);
+    animation: animate-border 0.3s ease-in;
+} 
+
+.camera-video-feed
+{
+  height: 400px;
+  width: 100%;
+}
+.camera-video-feed-container
+{
+  width:80%;
+
+  margin: 0 auto;
+}
+
+@media screen and (max-width:540px) {
+    .camera-video-feed-container
+    {
+      width: 100%;
+    }
+    .camera-video-feed
+    {
+      width: 95%;
+      margin: 0 auto;
+      display: block;
+    }
+}
+  

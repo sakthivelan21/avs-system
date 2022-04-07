@@ -2,12 +2,54 @@
 # which tells it has some routes for application and helps us to organize the code
 from flask import Blueprint,request,make_response,jsonify
 import uuid
+from datetime import datetime, timedelta
+import jwt
 
-from avs_app import db
+from avs_app import db,app
 from avs_app.admin.admin_controller import token_required
 from avs_app.camera.camera_model import CameraModel
+
+# for safely storing password and checking them
+from werkzeug.security import generate_password_hash, check_password_hash
+
 #naming the Blueprint
 bp = Blueprint('CameraController',__name__)
+
+# camera login 
+@bp.route('/login', methods=['POST'])
+def login():
+    auth = request.json
+    print(auth.get('name'))
+    print(auth.get('password'))
+    if not auth or not auth.get('name') or not auth.get('password'):
+        return make_response(
+            jsonify({"message": "Could not verify"}),
+            401,
+            {'WWW-Authenticate': 'Basic realm ="Login required"'}
+        )
+
+    camera = CameraModel.query.filter_by(name=auth.get('name')).first()
+
+    if not camera:
+        return make_response(
+            jsonify({"message": "Camera name doesn't exist"}),
+            401,
+            {'WWW-Authenticate': 'Basic realm ="User does not exist !!"'}
+        )
+    print(camera.name+" "+camera.password)
+
+    if check_password_hash(camera.password, auth.get('password')):
+        token = jwt.encode({
+            'id': camera.id,
+            'exp': datetime.utcnow() + timedelta(minutes=30)
+        }, app.config['SECRET_KEY'],algorithm="HS256")
+        return make_response(jsonify({"message": "Camera Login Sucessful", 'token': token}), 201)
+    return make_response(
+        jsonify({"message": "Wrong Camera name or password"}),
+        403,
+        {'WWW-Authenticate': 'Basic realm ="Wrong Password !!"'}
+    )
+
 
 # CRUD Operations On Camera
 
@@ -24,7 +66,7 @@ def addCamera(current_admin_id):
 				id = str(uuid.uuid4()),
 				name = request_data.get('name'),
 				location = request_data.get('location'),
-				password = request_data.get('password'),
+				password = generate_password_hash(request_data.get('password')),
 				adminId = current_admin_id
 			)
 			db.session.add(camera)

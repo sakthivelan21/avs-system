@@ -75,7 +75,7 @@ export default function AddUserPageComponent()
 			(responseData) =>{
 				if(responseData.success)
 				{
-					alertMessageHandler(responseData.message,"please login to use your account");
+					alertMessageHandler(responseData.message,"See the user details in existing users tab !!!");
 				}
 				else
 				{

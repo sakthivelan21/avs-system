@@ -24,7 +24,7 @@ function NavBarComponent()
 	
 	console.log("Rendering nav bar component");
 	return(
-		<div id="nav-bar-component">
+		<div className="nav-bar-component">
 			<div className="nav-body">
 				<div className="nav-header">
 					<Link to="/home" className="title-link">

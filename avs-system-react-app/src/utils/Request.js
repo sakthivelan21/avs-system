@@ -31,6 +31,11 @@ export const updateProfileDetails = async (profileDetails) => {
 
 //camera 
 
+export const cameraLoginRequest = async (logindetails) => {
+  let response = await axios.post(baseUrl + "/camera/login", logindetails);
+  return response.data;
+};
+
 export const addCamera = async (cameraDetails) => {
   let response = await axios.post(baseUrl + "/camera/addCamera", cameraDetails,{
     headers: {

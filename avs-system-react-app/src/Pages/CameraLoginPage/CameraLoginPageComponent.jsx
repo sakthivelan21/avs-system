@@ -2,14 +2,14 @@ import React,{useReducer,useCallback,useEffect,useRef} from 'react';
 import { Link,useNavigate,useLocation} from 'react-router-dom';
 
 import {AlertBox} from "../../App";
-import { loginRequest} from "../../utils/Request.js";
-import './LoginPageComponent.css';
+import {  cameraLoginRequest } from "../../utils/Request.js";
+import './CameraLoginPageComponent.css';
 import InputComponent from '../../Components/Input/InputComponent';
 import ButtonComponent from '../../Components/Button/ButtonComponent';
 import {useAuth} from '../../Components/Auth/AuthProvider';
 
 const initialValue={
-	username:'',
+	name:'',
 	password:''
 }
 
@@ -17,13 +17,13 @@ const reducerFunction=(state,action)=>{
 	return{...state,[action.name]:action.value}
 }
 
-export default function LoginPageComponent()
+export default function CameraLoginPageComponent()
 {
 	const alertBox = AlertBox();
 	
 	const [loginDetails,dispatchFunction]=useReducer(reducerFunction,initialValue);
 
-	const {username,password}=loginDetails;
+	const {name,password}=loginDetails;
 	
 	const updateLoginDetails=useCallback((event)=>{
 		dispatchFunction({'name':event.target.name,'value':event.target.value});
@@ -34,7 +34,7 @@ export default function LoginPageComponent()
 	const navigate = useNavigate();
 	const location = useLocation();
 	const inputRef=useRef(null);
-	const redirectPath = location.state?.path || '/home'
+	const redirectPath = location.state?.path || '/camera-home'
 	
 	useEffect(()=>{
 		inputRef.current.focus();
@@ -46,8 +46,8 @@ export default function LoginPageComponent()
 		event.preventDefault();
 		console.log(loginDetails);
 		
-		// sending the login request to flask server
-		loginRequest(loginDetails).then(
+		// sending the camera login request to flask server
+		cameraLoginRequest (loginDetails).then(
 			(responseData) =>{
 				// setting the auth token
 				auth.login(responseData.token);
@@ -61,7 +61,7 @@ export default function LoginPageComponent()
 				let alertDetailsObject=
 				   {
 					'alertTitle':error.response.data.message,
-					'alertText':'Please enter correct username and password to login...',
+					'alertText':'Please enter correct Camera name and password to login...',
 					'alertBox':{
 							'type':'alert',
 							'cancelButtonText':'',
@@ -81,22 +81,22 @@ export default function LoginPageComponent()
 	}
 	console.log('rendering Login PageComponent');
 	return(
-		<div id="login-page">
-			<img src="./page-side-image.jpg" id="login-page-image" alt="login-page-side-img"/>
-			<div id="login-page-form-container">
+		<div id="camera-login-page">
+			<img src="./page-side-image.jpg" id="camera-login-page-image" alt="login-page-side-img"/>
+			<div id="camera-login-page-form-container">
 				<p className="title"> <span><i className="fas fa-video"></i></span> AVS - SYSTEM</p>
-				<img src="./login-user.png" id="login-user-image" alt="login-user-img"/>
-				<div id="form-holder">
-					<form id="login-form" onSubmit={submitHandler}>
+				<img src="./camera.jpg" id="camera-login-user-image" alt="login-user-img"/>
+				<div id="camera-form-holder">
+					<form id="camera-login-form" onSubmit={submitHandler}>
 						<InputComponent 
 							iconClass="fa fa-user"
-							name="username" 
+							name="name" 
 							onChange={updateLoginDetails} 
 							type="text"
 							extraConditions={{}}
 							inputRef={inputRef}
-							placeholder="Username"
-							value={username}/>
+							placeholder="Camear name"
+							value={name}/>
 						<InputComponent 
 							iconClass="fa fa-key"
 							name="password" 
@@ -110,12 +110,8 @@ export default function LoginPageComponent()
 							Login <i className="fas fa-sign-in-alt"></i>
 						</ButtonComponent>
 					</form>
-					
 					<div className="login-page-links">
-						New User?  <Link to="/signup" className="signup-link">Click here</Link> 
-					</div>
-					<div className="login-page-links">
-						Camera Login?  <Link to="/camera-login" className="signup-link">Click here</Link> 
+						Admin Login ?  <Link to="/" className="signup-link">Click here</Link> 
 					</div>
 				</div>
 			</div>
