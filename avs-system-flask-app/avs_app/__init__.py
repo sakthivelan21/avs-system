@@ -44,7 +44,8 @@ def initialize_app():
 	cors=CORS(resources={
     r'/*': {
         'origins': [
-            'http://localhost:3000'
+            'http://localhost:3000',
+			'http://192.168.43.227:3000'
         ]
     }
 	})

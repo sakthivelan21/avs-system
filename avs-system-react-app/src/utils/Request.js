@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseUrl = "http://localhost:5000";
+const baseUrl = "http://192.168.43.227:5000";
+//const baseUrl = "http://localhost:5000";
 
 //admin 
 
@@ -76,6 +77,7 @@ export const deleteCameraById = async (cameraId) => {
     });
   return response.data;
 };
+
 // users
 export const getAllUsers = async () => {
   let response = await axios.get(baseUrl + "/user/getAllUsersByAdminId", {
@@ -118,3 +120,10 @@ export const deleteUserById = async (userId) => {
   return response.data;
 };
 
+export const getAllUserNameAndUrl = async () => {
+  let response = await axios.get(baseUrl + "/user/getAllUserNameAndUrl", {
+    headers: {
+      Authorization: sessionStorage.getItem("authToken")},
+    });
+  return response.data;
+};

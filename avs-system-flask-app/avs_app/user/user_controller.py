@@ -67,6 +67,7 @@ def getUserImage(filename):
 @bp.route('/getAllUsersByAdminId',methods=['GET'])
 @token_required
 def getAllUser(current_admin_id):
+	print(current_admin_id)
 	allUsers=UserModel.query.filter(UserModel.adminId==current_admin_id).all()
 	userDictArray=[]
 	for user in allUsers:
@@ -93,7 +94,20 @@ def getUserById(current_admin_id,user_id):
 			"adminId":user.adminId,
 			"userImageUrl":user.userImageUrl
 			}), 200)
-	
+
+@bp.route('/getAllUserNameAndUrl',methods=['GET'])
+@token_required
+def getAllUserNameAndUrl(current_admin_id):
+	allUsers=UserModel.query.filter(UserModel.adminId==current_admin_id).all()
+	userNameAndUrl=[]
+	for user in allUsers:
+		userNameAndUrl.append(
+			{
+			"name":user.name,
+			"userImageUrl":user.userImageUrl
+			}
+		)
+	return make_response(jsonify({"allUserNameAndUrl": userNameAndUrl}), 200)
 @bp.route('/updateUserDetails',methods=['PUT'])
 @token_required
 def updateUserById(current_admin_id):

@@ -40,7 +40,7 @@ def login():
 
     if check_password_hash(camera.password, auth.get('password')):
         token = jwt.encode({
-            'id': camera.id,
+            'id': camera.adminId,
             'exp': datetime.utcnow() + timedelta(minutes=30)
         }, app.config['SECRET_KEY'],algorithm="HS256")
         return make_response(jsonify({"message": "Camera Login Sucessful", 'token': token}), 201)
