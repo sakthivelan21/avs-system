@@ -111,6 +111,7 @@ function App() {
 							</RequiredAuth>
 							}
 						/>
+						<Route path="/camera-home-2" element={<CameraHomePageComponent/>}/>
 						<Route path="/camera-login" element={<CameraLoginPageComponent/>}/>
 						<Route path="/signup" element={<SignupPageComponent/>}/>
 						<Route 

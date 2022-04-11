@@ -1,4 +1,4 @@
-import React,{useRef,useEffect} from 'react';
+import React,{useRef,useEffect,useState,useCallback} from 'react';
 import CameraNavBarComponent from '../../Components/CameraNavBar/CameraNavBarComponent';
 import './CameraHomePageComponent.css';
 import * as faceapi from 'face-api.js';
@@ -9,6 +9,7 @@ function CameraHomePageComponent()
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
     let interval;
+    const [cameraDetails,setCameraDetails] = useState([]);
     const getWebcam=()=>{
         navigator.mediaDevices
             .getUserMedia({ video: { audio:false,facingMode:'environment' } })
@@ -21,6 +22,7 @@ function CameraHomePageComponent()
                 console.error("error:", err);
             });
     };
+    //first
     const startDetection= ()=>{
        canvasRef.current.innerHtml =  faceapi.createCanvasFromMedia(webcamRef.current);
        const displaySize = {width : webcamRef.current.clientWidth ,height : webcamRef.current.clientHeight};
@@ -35,29 +37,53 @@ function CameraHomePageComponent()
        },100);
     }
 
-    // const getImageDetails = async () => {
-    //     getAllUserNameAndUrl()
-    //         .then(
-    //             (responseData) => {
-    //                 console.log(responseData.allUserNameAndUrl);
-    //                 return Promise.all(
-    //                     responseData.allUserNameAndUrl.map( async (data)=>{
+    // second
+    // const startDetection= async ()=>{
+    //     console.log('in start detection');
+    //     canvasRef.current.innerHtml =  faceapi.createCanvasFromMedia(webcamRef.current);
+    //     const displaySize = {width : webcamRef.current.clientWidth ,height : webcamRef.current.clientHeight};
+    //     const labeledFaceDescriptors = await loadedLabeledImages();
+    //     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors,0.6); 
+    //     faceapi.matchDimensions(canvasRef.current,displaySize);
+    //     interval = setInterval(async ()=>{
+    //         const detections = await  faceapi.detectAllFaces(webcamRef.current,new faceapi.TinyFaceDetectorOptions());
+    //         console.log(detections);
+    //         const resizedDetections = faceapi.resizeResults(detections,displaySize);
+    //         const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
+    //         canvasRef.current.getContext('2d').clearRect(0,0,canvasRef.current.width,canvasRef.current.height);
+    //         results.forEach((result,i)=>{
+    //             const box = resizedDetections[i].box;
+    //             const drawBox = new faceapi.draw.DrawBox(box,{label:result.toString()});
+    //             drawBox.draw(canvasRef.current);
+                
+    //         });
+    //     },100);
+    //  }
+     //second
+    //  const loadedLabeledImages = ()=>{
+    //      return Promise.all(
+    //          cameraDetails.allUserNameAndUrl.map( async (data)=>{
+    //              const img = await faceapi.fetchImage(data.userImageUrl);
+    //              const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+    //              return new faceapi.LabeledFaceDescriptors(data.name,[detections.descriptor]);
+    //          })
+    //      )
+    //  }
+
     
-    //                         const img = await faceapi.fetchImage(data.userImageUrl);
-    //                         const detections = await  faceapi.detectSingleFace(img)
-    //                             .withFaceLandmarks().withFaceDescriptor();
-    //                         console.log(detections);
-    //                         return new faceapi.LabeledFaceDescriptors(data.name, [detections.descriptor]);
+    //second
+    // const getImageDetails = useCallback(() => {
+    //     getAllUserNameAndUrl().then( (responseData)=>{
+    //         console.log('in getting image Details');
+    //         console.log(responseData);
+    //         setCameraDetails(responseData);
+    //     }
+    //         ).catch(
+    //             (error)=>console.log(error)
+    //         );
+    // },[]);
 
-    //                     })
-    //                 )
-    //             }
-    //         )
-    //     .catch(
-    //         (error) =>console.log(error.response.data.message)
-    //     )
-    // }
-
+    //first
     useEffect(()=>{
         
         Promise.all(
@@ -73,6 +99,27 @@ function CameraHomePageComponent()
         console.log('module loaded successfully')
         return ()=> clearInterval(interval);
     },[interval]);
+
+    //second
+    // useEffect(()=>{
+        
+    //     Promise.all(
+    //         [
+    //             faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
+    //             faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
+    //             faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+    //             faceapi.nets.ssdMobilenetv1.loadFromUri('./models')
+    //         ]
+    //     )
+    //         .then(()=>{
+    //             getImageDetails();
+    //             getWebcam();
+    //         })
+    //         .catch((e) => console.log(e));
+        
+    //     console.log('module loaded successfully')
+    //     return ()=> clearInterval(interval);
+    // },[interval,getImageDetails]);
     return(
         <>
             <CameraNavBarComponent/>
