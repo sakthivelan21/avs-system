@@ -102,7 +102,6 @@ function App() {
 							</RequiredAuth>
 							}
 						/>
-
 						<Route 
 							path="/camera-home" 
 							element={

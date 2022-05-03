@@ -1,6 +1,6 @@
 import axios from "axios";
-const baseUrl = "http://192.168.43.227:5000";
-//const baseUrl = "http://localhost:5000";
+//const baseUrl = "http://192.168.43.227:5000";
+const baseUrl = "http://localhost:5000";
 
 //admin 
 
