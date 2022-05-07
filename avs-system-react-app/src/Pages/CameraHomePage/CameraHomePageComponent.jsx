@@ -8,13 +8,15 @@ function CameraHomePageComponent()
 {
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
-    let interval;
+    const intervalRef  = useRef();
+    const [mediaStream, setMediaStream] = useState(null);
     const [cameraDetails,setCameraDetails] = useState([]);
     const alertBox = AlertBox();
     const getWebcam=()=>{
         navigator.mediaDevices
             .getUserMedia({ video: { audio:false,facingMode:'environment' } })
             .then(stream => {
+                setMediaStream(stream);
                 let video = webcamRef.current;
                 video.srcObject = stream;
                 video.play();
@@ -46,39 +48,42 @@ function CameraHomePageComponent()
         const labeledFaceDescriptors = await loadedLabeledImages();
         const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors,0.6); 
         faceapi.matchDimensions(canvasRef.current,displaySize);
-        interval = setInterval(async ()=>{
+        intervalRef.current = setInterval(async ()=>{
             const detections = await  faceapi.detectAllFaces(webcamRef.current).withFaceLandmarks().withFaceDescriptors();
             console.log(detections);
             const resizedDetections = faceapi.resizeResults(detections,displaySize);
             const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
-            canvasRef.current.getContext('2d').clearRect(0,0,canvasRef.current.width,canvasRef.current.height);
-            console.log(results);
-            results.forEach((result,i)=>{
-                if(result.toString() === "Unknown")
-                {
-                    let alertDetailsObject=
-				   {
-					'alertTitle': "Intruder Alert",
-					'alertText':'Some intruder is present in ' + cameraDetails.name,
-					'alertBox':{
-							'type':'alert',
-							'cancelButtonText':'',
-							'okButtonText':'Ok',
-							'buttonState':false
-						},
-					'duration':2000,
-					'alertBoxDisplayState':true
-					};
-			 		
-			 	alertBox(alertDetailsObject)
-			 		.then(()=>console.log('alertbox is closed'))
-			 		.catch(()=>console.log('closing the alert box'));
-                }
-                const box = resizedDetections[i].detection.box;
-                const drawBox = new faceapi.draw.DrawBox(box,{label:result.toString()});
-                drawBox.draw(canvasRef.current);
-                
-            });
+            if(canvasRef.current!=null)
+            {
+                canvasRef.current.getContext('2d').clearRect(0,0,canvasRef.current.width,canvasRef.current.height);
+                console.log(results);
+                results.forEach((result,i)=>{
+                    if(result.toString() === "Unknown")
+                    {
+                        let alertDetailsObject=
+                    {
+                        'alertTitle': "Intruder Alert",
+                        'alertText':'Some intruder is present in ' + cameraDetails.name,
+                        'alertBox':{
+                                'type':'alert',
+                                'cancelButtonText':'',
+                                'okButtonText':'Ok',
+                                'buttonState':false
+                            },
+                        'duration':2000,
+                        'alertBoxDisplayState':true
+                        };
+                        
+                    alertBox(alertDetailsObject)
+                        .then(()=>console.log('alertbox is closed'))
+                        .catch(()=>console.log('closing the alert box'));
+                    }
+                    const box = resizedDetections[i].detection.box;
+                    const drawBox = new faceapi.draw.DrawBox(box,{label:result.toString()});
+                    drawBox.draw(canvasRef.current);
+                    
+                });
+            }
         },300);
      }
      //second
@@ -122,20 +127,17 @@ function CameraHomePageComponent()
     //     return ()=> clearInterval(interval);
     // },[interval]);
     const stopCamera= ()=>{
+        clearInterval(intervalRef.current);
+        if(mediaStream!=null)
+            mediaStream.getTracks().forEach(track => {
+                track.stop();
+            });
+        else
+        {
+           console.log( MediaStream.getTracks() );
+        }
+        console.log('cleared interval and camera');
         
-        navigator.mediaDevices
-        .getUserMedia({ video: { audio:false,facingMode:'environment' } })
-        .then(stream => {
-            
-            var track = stream.getTracks()[0];  // if only one media track
-            // ...
-            track.stop();
-            console.log('stopped video')
-
-        })
-        .catch(err => {
-            console.error("error:", err);
-        });
     }
     //second
     useEffect(()=>{
@@ -156,7 +158,7 @@ function CameraHomePageComponent()
         
         console.log('module loaded successfully')
         return ()=> {
-            stopCamera();
+            stopCamera();   
         };
     },[getImageDetails]);
     return(
@@ -172,7 +174,7 @@ function CameraHomePageComponent()
                         autoPlay muted></video>
                      <canvas className='canvas' ref={canvasRef}/>
                  </div>
-                 
+                 <button onClick={()=>stopCamera()}>stop</button>
             </div>
         </>
     );
