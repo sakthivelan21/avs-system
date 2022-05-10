@@ -95,7 +95,7 @@ export default function CameraLoginPageComponent()
 							type="text"
 							extraConditions={{}}
 							inputRef={inputRef}
-							placeholder="Camear name"
+							placeholder="Camera name"
 							value={name}/>
 						<InputComponent 
 							iconClass="fa fa-key"
