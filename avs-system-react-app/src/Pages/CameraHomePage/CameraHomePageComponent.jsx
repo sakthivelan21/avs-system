@@ -24,7 +24,7 @@ function CameraHomePageComponent()
 
     useEffect(()=>{
         console.log('redering camera home page');
-        const peer = new Peer('camera-peer');
+        const peer = new Peer();
         peer.on('open', function (id) {
           // Workaround for peer.reconnect deleting previous id
           if (peer.id === null) {

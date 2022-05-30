@@ -9,29 +9,32 @@ import { AlertBox } from '../../App';
 
 function HomePageComponent()
 {
-	const webcamRef = useRef(null);
-    const canvasRef = useRef(null);
-	const intervalRef  = useRef();
+	const intervalContainer  = useRef([]);
+	const webcamRefContainer= useRef({});
+	const canvasRefContainer= useRef({});
+	const currentCameraIndex=useRef(0);
 	const [peer,setPeer]=useState(null);
 	const [cameraDetails,setCameraDetails] = useState([{name:'',location:''}]);
 	const [userDetails,setUserDetails] = useState([]);
 	const alertBox = AlertBox();
 
-	const startDetection= async ()=>{
+	const startDetection= async (currentIndex)=>{
         console.log('in start detection');
-        canvasRef.current.innerHtml =  faceapi.createCanvasFromMedia(webcamRef.current);
-        const displaySize = {width : webcamRef.current.clientWidth ,height : webcamRef.current.clientHeight};
+        canvasRefContainer.current[currentIndex].innerHtml =  faceapi.createCanvasFromMedia(webcamRefContainer.current[currentIndex]);
+        const displaySize = {width : webcamRefContainer.current[currentIndex].clientWidth ,
+			height : webcamRefContainer.current[currentIndex].clientHeight};
         const labeledFaceDescriptors = await loadedLabeledImages();
         const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors,0.6); 
-        faceapi.matchDimensions(canvasRef.current,displaySize);
-        intervalRef.current = setInterval(async ()=>{
-            const detections = await  faceapi.detectAllFaces(webcamRef.current).withFaceLandmarks().withFaceDescriptors();
+        faceapi.matchDimensions(canvasRefContainer.current[currentIndex],displaySize);
+        intervalContainer.current.push( setInterval(async ()=>{
+            const detections = await  faceapi.detectAllFaces(webcamRefContainer.current[currentIndex]).withFaceLandmarks().withFaceDescriptors();
             console.log(detections);
             const resizedDetections = faceapi.resizeResults(detections,displaySize);
             const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
-            if(canvasRef.current!=null)
+            if(canvasRefContainer.current[currentIndex]!=null)
             {
-                canvasRef.current.getContext('2d').clearRect(0,0,canvasRef.current.width,canvasRef.current.height);
+                canvasRefContainer.current[currentIndex].getContext('2d').clearRect(0,0,canvasRefContainer.current[currentIndex].width,
+					canvasRefContainer.current[currentIndex].height);
                 console.log(results);
                 results.forEach((result,i)=>{
 					console.log(result.toString());
@@ -42,7 +45,7 @@ function HomePageComponent()
                         let alertDetailsObject=
                     {
                         'alertTitle': "Intruder Alert",
-                        'alertText':'Some intruder is present in ' + cameraDetails[0].name,
+                        'alertText':'Some intruder is present in ' + cameraDetails[currentIndex].name,
                         'alertBox':{
                                 'type':'alert',
                                 'cancelButtonText':'',
@@ -59,11 +62,11 @@ function HomePageComponent()
                     }
                     const box = resizedDetections[i].detection.box;
                     const drawBox = new faceapi.draw.DrawBox(box,{label:result.toString()});
-                    drawBox.draw(canvasRef.current);
+                    drawBox.draw(canvasRefContainer.current[currentIndex]);
                     
                 });
             }
-        },300);
+        },300));
      }
 	  //second
 	  const loadedLabeledImages = ()=>{
@@ -115,8 +118,11 @@ function HomePageComponent()
 					// Answer the call, providing our mediaStream
 					call.answer();
 					call.on('stream', function(remoteMediaStream) {
-						webcamRef.current.srcObject = remoteMediaStream;
-						webcamRef.current.play();
+						console.log(webcamRefContainer.current);
+						console.log(canvasRefContainer.current);
+						webcamRefContainer.current[currentCameraIndex.current].srcObject = remoteMediaStream;
+						webcamRefContainer.current[currentCameraIndex.current].play();
+						currentCameraIndex.current+=1;
 						console.log('call answered');
 					});
 				});
@@ -125,6 +131,7 @@ function HomePageComponent()
 					(responseData) =>{
 						console.log(responseData);
 						setCameraDetails(responseData.allCameras );
+						
 					}
 				).catch(
 					(error) =>{
@@ -137,7 +144,11 @@ function HomePageComponent()
 		
 		console.log('module loaded successfully')
 		return ()=>{
-			clearInterval(intervalRef.current);
+			console.log('clearing all intervals');
+
+			for(let i=0;i<intervalContainer.current.length;i++)
+				clearInterval(intervalContainer.current[i]);
+			console.log('cleared all the intervals');
 			if (peer) {
 				peer.disconnect();
 				peer.destroy();
@@ -149,18 +160,28 @@ function HomePageComponent()
 		<>
 			<NavBarComponent/>
 			<div id="home-page">
+				{
+					cameraDetails.map((cameraDetail,index)=>{
+						return(
+							<div key={index}>
+								<h3 className='camera-home-page-heading'>
+									{cameraDetail.name + " - " +cameraDetail.location}
+								</h3>	
+								
+									<div className='camera-video-feed-container'>
+										
+										<video 
+											className='camera-video-feed' 
+											ref={ref=> webcamRefContainer.current[index] = ref} 
+											onPlaying={()=>startDetection(index)}
+											autoPlay muted></video>
+										<canvas className='canvas' ref={ref=> canvasRefContainer.current[index] = ref}/>
+									</div>
+							</div>
+						)
+					})
+				}
 				
-				<h3 className='camera-home-page-heading'>
-					{cameraDetails[0].name + " - " +cameraDetails[0].location}
-				</h3>
-				<div className='camera-video-feed-container'>
-					<video 
-						className='camera-video-feed' 
-						ref={webcamRef} 
-						onPlaying={startDetection}
-						autoPlay muted></video>
-					<canvas className='canvas' ref={canvasRef}/>
-				</div>
 			</div>
 		</>)
 }
